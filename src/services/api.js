@@ -1,7 +1,10 @@
 import axios from 'axios'
 
-const API_URL = 'http://127.0.0.1:8000/api'
-const MEDIA_URL = 'http://127.0.0.1:8000'  // ← ДОБАВЬТЕ ЭТУ СТРОКУ
+// Используем переменную окружения, если есть, иначе локальный URL
+const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api'
+const MEDIA_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://127.0.0.1:8000'
+
+console.log('API_URL:', API_URL)  // для отладки — потом удали
 
 const api = axios.create({
     baseURL: API_URL,
@@ -58,4 +61,4 @@ export const getTeam = () => api.get('/team/')
 export const getDocuments = () => api.get('/documents/')
 
 export default api
-export { MEDIA_URL }  // ← ЭКСПОРТИРУЙТЕ MEDIA_URL
+export { MEDIA_URL }
