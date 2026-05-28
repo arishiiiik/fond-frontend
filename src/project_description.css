@@ -1,0 +1,485 @@
+/* Наследование шрифтов из style.css */
+.pd_text,
+.purpose p,
+.text_project_info p,
+.gallery__img {
+    font-family: 'Montserrat-Regular', sans-serif;
+}
+
+.purpose h2,
+.text_project_info h2 {
+    font-family: 'Montserrat-Bold', sans-serif;
+}
+
+.zag_main {
+    font-family: 'Vezitsa', sans-serif;
+}
+
+/* Отступ под фиксированную шапку */
+.project_content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Блок с описанием */
+.project_descr {
+    width: 100%;
+    max-width: 1600px;
+    height: auto;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    padding: 2% 3%;
+    display: flex;
+    gap: 5%;
+    align-items: center;
+    margin-top: 2%;
+    box-sizing: border-box;
+}
+
+.pd_text {
+    width: 50%;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 150%;
+    text-align: justify;
+    color: #000000;
+}
+
+.pd_img {
+    width: 50%;
+    border-radius: 15px;
+}
+
+/* Заголовки секций */
+.zagolovok {
+    margin-top: 40px;
+    margin-bottom: 15px;
+}
+
+.zag_main {
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.line {
+    width: 200px;
+    height: 5px;
+    background: linear-gradient(90deg, #55993C 0%, #92BA52 100%);
+    margin: 0 auto;
+    border-radius: 5px;
+}
+
+/* Выравнивание блока purpose_project */
+.purpose_project {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 5%;
+    padding: 20px 0;
+    width: 98%;
+    max-width: 1400px;
+}
+
+/* Левая часть — текст */
+.text_purpose {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Правая карточка */
+.project_short2 {
+    width: 40%;
+    background: linear-gradient(90deg, #419037 0%, #92BA52 100%);
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    padding: 25px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    box-sizing: border-box;
+}
+
+/* Элементы внутри карточки */
+.project_inf2 {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.project_inf2:last-child {
+    margin-bottom: 0;
+}
+
+/* Иконки */
+.project_inf2 img {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+/* Текстовый блок в карточке */
+.text_project_info {
+    flex: 1;
+}
+
+.text_project_info p {
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 0 5px 0;
+}
+
+.text_project_info h2 {
+    font-size: 24px;
+    color: #FFFFFF;
+    margin: 10px;
+}
+
+/* Заголовки целей */
+.purpose {
+    margin-bottom: 0;
+}
+
+.purpose h2 {
+    font-size: 24px;
+    color: #825B2C;
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 20px;
+}
+
+.purpose h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background: #419037;
+    border-radius: 50%;
+}
+
+/* Текст целей */
+.purpose p {
+    font-size: 18px;
+    line-height: 1.5;
+    color: #3E2201;
+    text-align: justify;
+    margin-bottom: 0;
+}
+
+/* Расстояние между блоками целей */
+.purpose:first-child {
+    margin-bottom: 15px;
+}
+
+/* Статус активный */
+.text_project_info h2.status-active-text {
+    color: #FFD700;
+    position: relative;
+    padding-left: 22px;
+}
+
+.text_project_info h2.status-active-text::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    background-color: #FFD700;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; transform: translateY(-50%) scale(1); }
+    100% { opacity: 0; transform: translateY(-50%) scale(2); }
+}
+
+/* Галерея */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 5vw);
+    grid-gap: 1.5rem;
+    margin-top: 30px;
+    margin-bottom: 50px;
+    width: 98%;
+    max-width: 1400px;
+}
+
+.gallery__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 15px;
+}
+
+.gallery__item--1 {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 3;
+}
+
+.gallery__item--2 {
+    grid-column-start: 3;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 3;
+}
+
+.gallery__item--3 {
+    grid-column-start: 5;
+    grid-column-end: 9;
+    grid-row-start: 1;
+    grid-row-end: 6;
+}
+
+.gallery__item--4 {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 3;
+    grid-row-end: 6;
+}
+
+.gallery__item--5 {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 6;
+    grid-row-end: 9;
+}
+
+.gallery__item--6 {
+    grid-column-start: 4;
+    grid-column-end: 6;
+    grid-row-start: 6;
+    grid-row-end: 9;
+}
+
+.gallery__item--7 {
+    grid-column-start: 6;
+    grid-column-end: 9;
+    grid-row-start: 6;
+    grid-row-end: 9;
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+    .purpose_project {
+        flex-direction: column;
+        width: 98%;
+    }
+    
+    .text_purpose {
+        width: 100%;
+    }
+    
+    .project_short2 {
+        width: 100%;
+        margin-top: 30px;
+    }
+}
+
+@media (max-width: 1280px) {
+    .project_descr {
+        flex-direction: column;
+        gap: 30px;
+        padding: 4%;
+        text-align: center;
+    }
+    
+    .pd_text,
+    .pd_img {
+        width: 100%;
+    }
+}
+
+@media (max-width: 992px) {
+    .gallery {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 98%;
+    }
+    
+    .gallery__item {
+        width: 100%;
+        height: 250px;
+    }
+    
+    .zag_main {
+        font-size: 36px;
+    }
+    
+    .line {
+        width: 150px;
+    }
+}
+
+@media (max-width: 768px) {
+    .project_content {
+        padding-top: 80px;
+    }
+    
+    .project_descr {
+        width: 96%;
+        padding: 5%;
+    }
+    
+    .purpose_project {
+        width: 96%;
+    }
+    
+    .gallery {
+        width: 96%;
+    }
+    
+    .pd_text {
+        font-size: 16px;
+    }
+    
+    .purpose h2 {
+        font-size: 20px;
+    }
+    
+    .purpose p {
+        font-size: 15px;
+    }
+    
+    .project_short2 {
+        padding: 20px;
+    }
+    
+    .project_inf2 {
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+    
+    .project_inf2 img {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .text_project_info h2 {
+        font-size: 16px;
+    }
+    
+    .zag_main {
+        font-size: 32px;
+    }
+    
+    .gallery__item {
+        height: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    .project_content {
+        padding-top: 70px;
+    }
+    
+    .project_descr {
+        width: 100%;
+        padding: 6%;
+        border-radius: 15px;
+    }
+    
+    .purpose_project {
+        width: 100%;
+    }
+    
+    .gallery {
+        width: 100%;
+    }
+    
+    .pd_text {
+        font-size: 14px;
+    }
+    
+    .purpose h2 {
+        font-size: 18px;
+    }
+    
+    .purpose p {
+        font-size: 14px;
+    }
+    
+    .project_short2 {
+        padding: 18px;
+    }
+    
+    .project_inf2 {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .project_inf2 img {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .text_project_info p {
+        font-size: 13px;
+    }
+    
+    .text_project_info h2 {
+        font-size: 15px;
+    }
+    
+    .zag_main {
+        font-size: 28px;
+    }
+    
+    .line {
+        width: 120px;
+        height: 4px;
+    }
+    
+    .gallery {
+        gap: 15px;
+    }
+    
+    .gallery__item {
+        height: 180px;
+    }
+}
+
+@media (max-width: 375px) {
+    .project_descr {
+        padding: 8%;
+    }
+    
+    .pd_text {
+        font-size: 13px;
+    }
+    
+    .purpose h2 {
+        font-size: 16px;
+    }
+    
+    .purpose p {
+        font-size: 13px;
+    }
+    
+    .zag_main {
+        font-size: 24px;
+    }
+    
+    .gallery__item {
+        height: 160px;
+    }
+}
