@@ -56,7 +56,7 @@ function AdminNews() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         setSaving(true)
-        
+
         const data = new FormData()
         data.append('title', form.title)
         data.append('description', form.description)
@@ -171,17 +171,17 @@ function AdminNews() {
                         </div>
                         <form onSubmit={handleSubmit}>
                             <div style={{ padding: '15px' }}>
-                                <input type="text" placeholder="Заголовок" value={form.title} onChange={e => setForm({...form, title: e.target.value})} required style={{ width: '100%', padding: '8px', margin: '8px 0', border: '1px solid #ddd', borderRadius: '8px' }} />
-                                <textarea placeholder="Описание" value={form.description} onChange={e => setForm({...form, description: e.target.value})} rows="4" required style={{ width: '100%', padding: '8px', margin: '8px 0', border: '1px solid #ddd', borderRadius: '8px' }} />
-                                <input type="date" value={form.date} onChange={e => setForm({...form, date: e.target.value})} required style={{ width: '100%', padding: '8px', margin: '8px 0', border: '1px solid #ddd', borderRadius: '8px' }} />
-                                <input type="url" placeholder="Ссылка (если есть)" value={form.link} onChange={e => setForm({...form, link: e.target.value})} style={{ width: '100%', padding: '8px', margin: '8px 0', border: '1px solid #ddd', borderRadius: '8px' }} />
+                                <input type="text" placeholder="Заголовок" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} required style={{ width: '100%', padding: '8px', margin: '8px 0', border: '1px solid #ddd', borderRadius: '8px' }} />
+                                <textarea placeholder="Описание" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} rows="4" required style={{ width: '100%', padding: '8px', margin: '8px 0', border: '1px solid #ddd', borderRadius: '8px' }} />
+                                <input type="date" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} required style={{ width: '100%', padding: '8px', margin: '8px 0', border: '1px solid #ddd', borderRadius: '8px' }} />
+                                <input type="url" placeholder="Ссылка (если есть)" value={form.link} onChange={e => setForm({ ...form, link: e.target.value })} style={{ width: '100%', padding: '8px', margin: '8px 0', border: '1px solid #ddd', borderRadius: '8px' }} />
                                 <input type="file" accept="image/*" onChange={e => setImageFile(e.target.files[0])} style={{ width: '100%', padding: '8px', margin: '8px 0' }} />
-                                <input type="number" placeholder="Порядок" value={form.order} onChange={e => setForm({...form, order: parseInt(e.target.value)})} style={{ width: '100%', padding: '8px', margin: '8px 0', border: '1px solid #ddd', borderRadius: '8px' }} />
+                                <input type="number" placeholder="Порядок" value={form.order} onChange={e => setForm({ ...form, order: parseInt(e.target.value) })} style={{ width: '100%', padding: '8px', margin: '8px 0', border: '1px solid #ddd', borderRadius: '8px' }} />
                             </div>
                             <div style={{ padding: '15px', borderTop: '1px solid #ddd', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
                                 <button type="button" onClick={() => setShowForm(false)}>Отмена</button>
-                                <button type="submit" disabled={saving} style={{ background: '#419037', color: 'white', padding: '8px 16px', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>
-                                    {saving ? 'Сохранение...' : 'Сохранить'}
+                                <button style={{ background: '#419037', color: 'white', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer' }}>
+                                    Сохранить
                                 </button>
                             </div>
                         </form>

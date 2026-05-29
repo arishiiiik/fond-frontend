@@ -36,13 +36,54 @@ function AdminHomePage() {
     return (
         <div>
             <h1 style={{ fontSize: '24px', marginBottom: '24px' }}>Главная страница</h1>
-            <Card title="Hero-блок">
-                <Field label="Заголовок" value={home?.hero_title || ''} onChange={val => setHome({...home, hero_title: val})} />
-                <Field label="Текст" textarea value={home?.hero_text || ''} onChange={val => setHome({...home, hero_text: val})} />
-                <Field label="Текст кнопки" value={home?.hero_button_text || ''} onChange={val => setHome({...home, hero_button_text: val})} />
-                <Field label="Ссылка кнопки" value={home?.hero_button_link || ''} onChange={val => setHome({...home, hero_button_link: val})} />
-                <Button onClick={save}>Сохранить</Button>
-            </Card>
+
+            <div style={{ background: 'white', borderRadius: '12px', padding: '24px', maxWidth: '700px' }}>
+                <h2 style={{ fontSize: '18px', marginBottom: '16px' }}>Hero-блок</h2>
+
+                <div style={{ marginBottom: '16px' }}>
+                    <label style={{ display: 'block', marginBottom: '6px', fontWeight: 500 }}>Заголовок</label>
+                    <input
+                        type="text"
+                        value={home?.hero_title || ''}
+                        onChange={e => setHome({ ...home, hero_title: e.target.value })}
+                        style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ccc' }}
+                    />
+                </div>
+
+                <div style={{ marginBottom: '16px' }}>
+                    <label style={{ display: 'block', marginBottom: '6px', fontWeight: 500 }}>Текст</label>
+                    <textarea
+                        value={home?.hero_text || ''}
+                        onChange={e => setHome({ ...home, hero_text: e.target.value })}
+                        rows="4"
+                        style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ccc' }}
+                    />
+                </div>
+
+                <div style={{ marginBottom: '16px' }}>
+                    <label style={{ display: 'block', marginBottom: '6px', fontWeight: 500 }}>Текст кнопки</label>
+                    <input
+                        type="text"
+                        value={home?.hero_button_text || ''}
+                        onChange={e => setHome({ ...home, hero_button_text: e.target.value })}
+                        style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ccc' }}
+                    />
+                </div>
+
+                <div style={{ marginBottom: '24px' }}>
+                    <label style={{ display: 'block', marginBottom: '6px', fontWeight: 500 }}>Ссылка кнопки</label>
+                    <input
+                        type="text"
+                        value={home?.hero_button_link || ''}
+                        onChange={e => setHome({ ...home, hero_button_link: e.target.value })}
+                        style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ccc' }}
+                    />
+                </div>
+
+                <button onClick={save} style={{ background: '#3b82f6', color: 'white', padding: '10px 20px', borderRadius: '8px', border: 'none', cursor: 'pointer' }}>
+                    Сохранить
+                </button>
+            </div>
         </div>
     )
 }

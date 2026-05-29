@@ -1,6 +1,25 @@
 import { useState, useEffect } from 'react'
 import api from '../../services/api'
 
+const inputStyle = {
+    width: '100%',
+    padding: '10px',
+    borderRadius: '8px',
+    border: '1px solid #cbd5e1',
+    fontSize: '14px',
+    boxSizing: 'border-box'
+}
+
+const buttonStyle = {
+    background: '#3b82f6',
+    color: 'white',
+    border: 'none',
+    padding: '8px 16px',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    fontSize: '14px'
+}
+
 function AdminFondPage() {
     const [fond, setFond] = useState(null)
     const [history, setHistory] = useState([])
@@ -55,29 +74,61 @@ function AdminFondPage() {
     return (
         <div>
             <h1 style={{ fontSize: '24px', marginBottom: '24px' }}>О фонде</h1>
-            
-            <Card title="Текст о фонде">
-                <Field label="Текст" textarea rows={6} value={fond?.about_text || ''} onChange={val => setFond({...fond, about_text: val})} />
-                <Button onClick={saveFond}>Сохранить</Button>
-            </Card>
 
-            <Card title="История фонда">
-                <button onClick={addHistory} style={{ ...buttonStyle, marginBottom: '16px', background: '#22c55e' }}>+ Добавить событие</button>
+            <div style={{ background: 'white', borderRadius: '12px', padding: '24px', marginBottom: '24px' }}>
+                <h2 style={{ fontSize: '18px', marginBottom: '16px' }}>Текст о фонде</h2>
+                <textarea
+                    value={fond?.about_text || ''}
+                    onChange={e => setFond({ ...fond, about_text: e.target.value })}
+                    rows={6}
+                    style={inputStyle}
+                />
+                <button onClick={saveFond} style={buttonStyle}>Сохранить</button>
+            </div>
+
+            <div style={{ background: 'white', borderRadius: '12px', padding: '24px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                    <h2 style={{ fontSize: '18px' }}>История фонда</h2>
+                    <button onClick={addHistory} style={{ ...buttonStyle, background: '#22c55e' }}>+ Добавить событие</button>
+                </div>
+
                 {history.map(item => (
                     <div key={item.id} style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px', marginBottom: '16px' }}>
                         <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
-                            <input type="number" value={item.year} onChange={e => updateHistory(item.id, 'year', parseInt(e.target.value))} style={inputStyle} placeholder="Год" />
-                            <select value={item.side} onChange={e => updateHistory(item.id, 'side', e.target.value)} style={inputStyle}>
+                            <input
+                                type="number"
+                                value={item.year}
+                                onChange={e => updateHistory(item.id, 'year', parseInt(e.target.value))}
+                                style={{ ...inputStyle, width: '100px' }}
+                                placeholder="Год"
+                            />
+                            <select
+                                value={item.side}
+                                onChange={e => updateHistory(item.id, 'side', e.target.value)}
+                                style={inputStyle}
+                            >
                                 <option value="left">Слева</option>
                                 <option value="right">Справа</option>
                             </select>
                         </div>
-                        <input type="text" value={item.title} onChange={e => updateHistory(item.id, 'title', e.target.value)} style={{ ...inputStyle, width: '100%', marginBottom: '12px' }} placeholder="Заголовок" />
-                        <textarea value={item.description} onChange={e => updateHistory(item.id, 'description', e.target.value)} rows={3} style={{ ...inputStyle, width: '100%', marginBottom: '12px' }} placeholder="Описание" />
+                        <input
+                            type="text"
+                            value={item.title}
+                            onChange={e => updateHistory(item.id, 'title', e.target.value)}
+                            style={{ ...inputStyle, width: '100%', marginBottom: '12px' }}
+                            placeholder="Заголовок"
+                        />
+                        <textarea
+                            value={item.description}
+                            onChange={e => updateHistory(item.id, 'description', e.target.value)}
+                            rows={3}
+                            style={{ ...inputStyle, width: '100%', marginBottom: '12px' }}
+                            placeholder="Описание"
+                        />
                         <button onClick={() => deleteHistory(item.id)} style={{ ...buttonStyle, background: '#ef4444' }}>Удалить</button>
                     </div>
                 ))}
-            </Card>
+            </div>
         </div>
     )
 }
