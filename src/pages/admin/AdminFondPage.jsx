@@ -1,97 +1,52 @@
 import { useState, useEffect } from 'react'
-import api from '../../services/api.js'
+import api from '../../services/api'
 
 function AdminFondPage() {
     const [fond, setFond] = useState(null)
     const [history, setHistory] = useState([])
     const [loading, setLoading] = useState(true)
-    const [imageFile, setImageFile] = useState(null)
 
-    const loadData = async () => {
-        try {
-            const [fondRes, historyRes] = await Promise.all([
-                api.get('/fond/'),
-                api.get('/history/'),
-            ])
-            
-            const fondData = Array.isArray(fondRes.data) && fondRes.data.length > 0 
-                ? fondRes.data[0] 
-                : fondRes.data
-            setFond(fondData)
-            setHistory(historyRes.data || [])
-        } catch (err) {
-            console.error('Ошибка:', err)
-            alert('Ошибка загрузки: ' + (err.response?.data?.detail || err.message))
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    useEffect(() => { loadData() }, [])
+    useEffect(() => {
+        Promise.all([api.get('/fond/'), api.get('/history/')])
+            .then(([fondRes, historyRes]) => {
+                const fondData = fondRes.data?.[0] || fondRes.data || {}
+                setFond(fondData)
+                setHistory(historyRes.data || [])
+                setLoading(false)
+            })
+            .catch(err => {
+                console.error(err)
+                setLoading(false)
+            })
+    }, [])
 
     const saveFond = async () => {
         try {
-            const formData = new FormData()
-            formData.append('about_text', fond?.about_text || '')
-            if (imageFile) {
-                formData.append('about_image', imageFile)
-            }
-
             if (fond?.id) {
-                await api.put(`/fond/${fond.id}/`, formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                })
+                await api.put(`/fond/${fond.id}/`, fond)
             } else {
-                await api.post('/fond/', formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                })
+                await api.post('/fond/', fond)
             }
-            alert('Сохранено!')
-            setImageFile(null)
-            loadData()
+            alert('Сохранено')
         } catch (err) {
-            console.error('Ошибка сохранения:', err)
-            alert('Ошибка: ' + (err.response?.data?.detail || JSON.stringify(err.response?.data) || 'Неизвестная ошибка'))
+            alert('Ошибка')
         }
     }
 
     const addHistory = async () => {
-        try {
-            const res = await api.post('/history/', 
-                { 
-                    year: new Date().getFullYear(), 
-                    title: 'Новое событие', 
-                    description: 'Описание', 
-                    side: 'left', 
-                    order: history.length 
-                }
-            )
-            setHistory([...history, res.data])
-        } catch (err) {
-            console.error('Ошибка:', err)
-            alert('Ошибка: ' + (err.response?.data?.detail || 'Неизвестная ошибка'))
-        }
+        const res = await api.post('/history/', { year: new Date().getFullYear(), title: 'Новое событие', description: '', side: 'left', order: history.length })
+        setHistory([...history, res.data])
     }
 
     const updateHistory = async (id, field, value) => {
-        try {
-            await api.patch(`/history/${id}/`, { [field]: value })
-            setHistory(history.map(h => h.id === id ? { ...h, [field]: value } : h))
-        } catch (err) {
-            console.error('Ошибка:', err)
-            alert('Ошибка обновления')
-        }
+        await api.patch(`/history/${id}/`, { [field]: value })
+        setHistory(history.map(h => h.id === id ? { ...h, [field]: value } : h))
     }
 
     const deleteHistory = async (id) => {
         if (confirm('Удалить событие?')) {
-            try {
-                await api.delete(`/history/${id}/`)
-                setHistory(history.filter(h => h.id !== id))
-            } catch (err) {
-                console.error('Ошибка:', err)
-                alert('Ошибка удаления')
-            }
+            await api.delete(`/history/${id}/`)
+            setHistory(history.filter(h => h.id !== id))
         }
     }
 
@@ -99,78 +54,30 @@ function AdminFondPage() {
 
     return (
         <div>
-            <h1>Редактирование страницы "О фонде"</h1>
+            <h1 style={{ fontSize: '24px', marginBottom: '24px' }}>О фонде</h1>
+            
+            <Card title="Текст о фонде">
+                <Field label="Текст" textarea rows={6} value={fond?.about_text || ''} onChange={val => setFond({...fond, about_text: val})} />
+                <Button onClick={saveFond}>Сохранить</Button>
+            </Card>
 
-            <div style={{ border: '1px solid #ccc', padding: '15px', marginBottom: '20px' }}>
-                <h2>1. Текст о фонде</h2>
-                {fond?.about_image && (
-                    <div style={{ marginBottom: '10px' }}>
-                        <img 
-                            src={`http://127.0.0.1:8000${fond.about_image}`} 
-                            alt="О фонде" 
-                            style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover' }}
-                        />
-                    </div>
-                )}
-                <input 
-                    type="file" 
-                    accept="image/*"
-                    onChange={(e) => setImageFile(e.target.files[0])}
-                    style={{ marginBottom: '10px', display: 'block' }}
-                />
-                <textarea 
-                    value={fond?.about_text || ''} 
-                    onChange={e => setFond({...fond, about_text: e.target.value})} 
-                    rows="6" 
-                    style={{ width: '100%', padding: '8px', marginBottom: '10px' }} 
-                />
-                <button onClick={saveFond}>Сохранить текст и изображение</button>
-            </div>
-
-            <div style={{ border: '1px solid #ccc', padding: '15px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <h2>2. История фонда (таймлайн)</h2>
-                    <button onClick={addHistory}>+ Добавить событие</button>
-                </div>
+            <Card title="История фонда">
+                <button onClick={addHistory} style={{ ...buttonStyle, marginBottom: '16px', background: '#22c55e' }}>+ Добавить событие</button>
                 {history.map(item => (
-                    <div key={item.id} style={{ border: '1px solid #eee', padding: '10px', margin: '10px 0' }}>
-                        <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-                            <input 
-                                type="number" 
-                                value={item.year} 
-                                onChange={e => updateHistory(item.id, 'year', parseInt(e.target.value))} 
-                                style={{ width: '100px', padding: '5px' }} 
-                            />
-                            <select 
-                                value={item.side} 
-                                onChange={e => updateHistory(item.id, 'side', e.target.value)}
-                                style={{ padding: '5px' }}
-                            >
+                    <div key={item.id} style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px', marginBottom: '16px' }}>
+                        <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
+                            <input type="number" value={item.year} onChange={e => updateHistory(item.id, 'year', parseInt(e.target.value))} style={inputStyle} placeholder="Год" />
+                            <select value={item.side} onChange={e => updateHistory(item.id, 'side', e.target.value)} style={inputStyle}>
                                 <option value="left">Слева</option>
                                 <option value="right">Справа</option>
                             </select>
                         </div>
-                        <input 
-                            type="text" 
-                            value={item.title} 
-                            onChange={e => updateHistory(item.id, 'title', e.target.value)} 
-                            style={{ width: '100%', padding: '5px', marginBottom: '10px' }} 
-                        />
-                        <textarea 
-                            value={item.description} 
-                            onChange={e => updateHistory(item.id, 'description', e.target.value)} 
-                            rows="3" 
-                            style={{ width: '100%', padding: '5px', marginBottom: '10px' }} 
-                        />
-                        <button 
-                            onClick={() => deleteHistory(item.id)}
-                            style={{ padding: '5px 10px', background: '#e74c3c', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-                        >
-                            Удалить
-                        </button>
+                        <input type="text" value={item.title} onChange={e => updateHistory(item.id, 'title', e.target.value)} style={{ ...inputStyle, width: '100%', marginBottom: '12px' }} placeholder="Заголовок" />
+                        <textarea value={item.description} onChange={e => updateHistory(item.id, 'description', e.target.value)} rows={3} style={{ ...inputStyle, width: '100%', marginBottom: '12px' }} placeholder="Описание" />
+                        <button onClick={() => deleteHistory(item.id)} style={{ ...buttonStyle, background: '#ef4444' }}>Удалить</button>
                     </div>
                 ))}
-            </div>
+            </Card>
         </div>
     )
 }

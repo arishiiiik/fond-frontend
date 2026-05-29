@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import PrivateRoute from './components/PrivateRoute'
 import { ModalProvider, useModal } from './context/ModalContext'
 import ModalManager from './components/ModalManager'
@@ -29,6 +29,12 @@ import FondPage from './pages/FondPage'
 import ContactsPage from './pages/ContactsPage'
 import NotFoundPage from './pages/NotFoundPage'
 
+// Компонент проверки авторизации для редиректа
+function AdminRedirect() {
+  const token = localStorage.getItem('admin_token')
+  return token ? <Navigate to="/admin/projects" replace /> : <Navigate to="/admin/login" replace />
+}
+
 // Компонент с маршрутами
 function AppRoutes() {
   const { modalType, isOpen, closeModal } = useModal()
@@ -45,14 +51,15 @@ function AppRoutes() {
         <Route path="/fond" element={<FondPage />} />
         <Route path="/contacts" element={<ContactsPage />} />
         
-        {/* Админ маршруты - доступны только авторизованным */}
+        {/* Админ маршруты */}
         <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminRedirect />} />
         <Route path="/admin" element={
           <PrivateRoute>
             <AdminLayout />
           </PrivateRoute>
         }>
-          <Route index element={<AdminProjects />} />
+          <Route index element={<Navigate to="/admin/projects" replace />} />
           <Route path="home" element={<AdminHomePage />} />
           <Route path="fond" element={<AdminFondPage />} />
           <Route path="projects" element={<AdminProjects />} />

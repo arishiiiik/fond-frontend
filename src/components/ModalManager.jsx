@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import api from '../services/api'
 
 function DonationModal({ onClose }) {
   const [loading, setLoading] = useState(false)
@@ -14,21 +15,17 @@ function DonationModal({ onClose }) {
     }
     
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/donation-requests/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      })
+      const response = await api.post('/donation-requests/', formData)
       
-      if (response.ok) {
+      if (response.status === 201) {
         alert('Спасибо! Ваша заявка принята.')
         onClose()
         e.target.reset()
       } else {
-        const error = await response.json()
-        alert('Ошибка: ' + JSON.stringify(error))
+        alert('Ошибка: ' + JSON.stringify(response.data))
       }
     } catch (error) {
+      console.error('Ошибка:', error)
       alert('Ошибка подключения к серверу')
     } finally {
       setLoading(false)
@@ -75,21 +72,17 @@ function PartnerModal({ onClose }) {
     }
     
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/partner-requests/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      })
+      const response = await api.post('/partner-requests/', formData)
       
-      if (response.ok) {
+      if (response.status === 201) {
         alert('Заявка отправлена! Мы свяжемся с вами.')
         onClose()
         e.target.reset()
       } else {
-        const error = await response.json()
-        alert('Ошибка: ' + JSON.stringify(error))
+        alert('Ошибка: ' + JSON.stringify(response.data))
       }
     } catch (error) {
+      console.error('Ошибка:', error)
       alert('Ошибка подключения к серверу')
     } finally {
       setLoading(false)
@@ -148,21 +141,17 @@ function VolunteerModal({ onClose }) {
     }
     
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/volunteer-requests/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      })
+      const response = await api.post('/volunteer-requests/', formData)
       
-      if (response.ok) {
+      if (response.status === 201) {
         alert('Заявка отправлена! Мы свяжемся с вами.')
         onClose()
         e.target.reset()
       } else {
-        const error = await response.json()
-        alert('Ошибка: ' + JSON.stringify(error))
+        alert('Ошибка: ' + JSON.stringify(response.data))
       }
     } catch (error) {
+      console.error('Ошибка:', error)
       alert('Ошибка подключения к серверу')
     } finally {
       setLoading(false)
@@ -210,10 +199,14 @@ function ModalManager({ modalType, isOpen, onClose }) {
 
   const renderModal = () => {
     switch (modalType) {
-      case 'donation': return <DonationModal onClose={onClose} />
-      case 'partner': return <PartnerModal onClose={onClose} />
-      case 'volunteer': return <VolunteerModal onClose={onClose} />
-      default: return null
+      case 'donation':
+        return <DonationModal onClose={onClose} />
+      case 'partner':
+        return <PartnerModal onClose={onClose} />
+      case 'volunteer':
+        return <VolunteerModal onClose={onClose} />
+      default:
+        return null
     }
   }
 

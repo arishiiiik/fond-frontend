@@ -1,8 +1,26 @@
+import { useState, useEffect } from 'react'
+import api from '../../services/api'
 import '../../fond.css'
 import HistoryItem from './HistoryItem'
-import historyData from '../../data/history'
 
 function HistoryTimeline() {
+  const [history, setHistory] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    api.get('/history/')
+      .then(response => {
+        setHistory(response.data)
+        setLoading(false)
+      })
+      .catch(error => {
+        console.error('Ошибка загрузки истории:', error)
+        setLoading(false)
+      })
+  }, [])
+
+  if (loading) return <div className="fond_history"><div className="zagolovok"><p>Загрузка...</p></div></div>
+
   return (
     <div className="fond_history">
       <div className="zagolovok">
@@ -12,10 +30,8 @@ function HistoryTimeline() {
       </div>
 
       <div className="history_content">
-        {/* Центральная линия */}
         <div className="history_line"></div>
-
-        {historyData.map(item => (
+        {history.map(item => (
           <HistoryItem
             key={item.id}
             year={item.year}

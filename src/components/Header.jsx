@@ -8,7 +8,7 @@ function Header() {
   return (
     <header>
       <div className="logo">
-        <img src="/images/logo.png" alt="fond_logo"/>
+        <img src="/images/logo.png" alt="fond_logo" />
         <div className="logo_text">
           <p className="logo-description_1">Земля Вологодская</p>
           <p className="logo-description_2">фонд развития малых городов и сёл</p>
@@ -26,9 +26,11 @@ function Header() {
           </ul>
         </nav>
       </div>
-      <button className="button_support" onClick={openDonationModal}>Поддержать фонд</button>
-      
-      <input type="checkbox" id="burger-toggle" style={{ display: 'none' }}/>
+      <button className="button_support" onClick={openDonationModal}>
+        Поддержать фонд
+      </button>
+
+      <input type="checkbox" id="burger-toggle" style={{ display: 'none' }} />
       <label htmlFor="burger-toggle" className="burger-btn">
         <span></span>
         <span></span>
@@ -37,7 +39,7 @@ function Header() {
       <label htmlFor="burger-toggle" className="mobile-overlay"></label>
       <nav className="mobile-nav">
         <div className="logo">
-          <img src="/images/logo.png" alt="fond_logo"/>
+          <img src="/images/logo.png" alt="fond_logo" />
           <div className="logo_text">
             <p className="logo-description_1">Земля Вологодская</p>
             <p className="logo-description_2">фонд развития малых городов и сёл</p>
@@ -58,3 +60,4 @@ function Header() {
 }
 
 export default Header
+

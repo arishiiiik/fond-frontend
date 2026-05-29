@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
+const API_URL = import.meta.env.VITE_API_URL || 'https://fond-backend.onrender.com/api'
+
 function AdminLogin() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -13,36 +15,40 @@ function AdminLogin() {
         e.preventDefault()
         setLoading(true)
         setError('')
-        
+
+        console.log('API_URL:', API_URL)
+
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/token/', {
+            const response = await axios.post(`${API_URL}/token/`, {
                 username,
                 password
             })
-            
-            // Сохраняем токены
+
+            console.log('Response:', response.data)
+
             localStorage.setItem('admin_token', response.data.access)
             localStorage.setItem('admin_refresh', response.data.refresh)
-            
-            // Перенаправляем на страницу проектов
+
             navigate('/admin/projects')
         } catch (err) {
             console.error('Login error:', err)
-            setError('Неверный логин или пароль')
+            setError(err.response?.data?.detail || 'Неверный логин или пароль')
         } finally {
             setLoading(false)
         }
     }
 
     return (
-        <div style={{
+
+        < div style={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             minHeight: '100vh',
             background: 'linear-gradient(135deg, #fffcea 0%, #f5f0e0 100%)',
             fontFamily: 'Montserrat-Regular, sans-serif'
-        }}>
+        }
+        }>
             <div style={{
                 background: 'white',
                 padding: '40px',
@@ -59,7 +65,7 @@ function AdminLogin() {
                     marginBottom: '10px'
                 }}>Админ-панель</h1>
                 <p style={{ color: '#886429', marginBottom: '30px', fontSize: '14px' }}>Фонд "Земля Вологодская"</p>
-                
+
                 <form onSubmit={handleSubmit}>
                     {error && <div style={{
                         background: '#fee',
@@ -69,7 +75,7 @@ function AdminLogin() {
                         marginBottom: '20px',
                         fontSize: '14px'
                     }}>{error}</div>}
-                    
+
                     <input
                         type="text"
                         placeholder="Логин"
@@ -124,7 +130,7 @@ function AdminLogin() {
                     </button>
                 </form>
             </div>
-        </div>
+        </div >
     )
 }
 

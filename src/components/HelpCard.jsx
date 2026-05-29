@@ -1,9 +1,7 @@
-import { useModal } from '../hooks/useModal'
-import { MEDIA_URL } from '../services/api'
+import { useModal } from '../context/ModalContext'
 
 function HelpCard({ icon, title, description, buttonText, modalType }) {
   const { openDonationModal, openPartnerModal, openVolunteerModal } = useModal()
-  const imageUrl = icon ? `${MEDIA_URL}${icon}` : null;
   
   const handleClick = () => {
     if (modalType === 'donation') openDonationModal()
@@ -14,7 +12,7 @@ function HelpCard({ icon, title, description, buttonText, modalType }) {
   
   return (
     <div className="help_block">
-      {imageUrl && <img className="help_img" src={imageUrl} alt={title} />}
+      <img className="help_img" src={icon} alt={title} />
       <h2 className="help_zag">{title}</h2>
       <p className="help_description">{description}</p>
       <button className="help_button" onClick={handleClick}>
