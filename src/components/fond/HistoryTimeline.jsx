@@ -1,6 +1,6 @@
 import '../../fond.css'
 import HistoryItem from './HistoryItem'
-import historyData from '../../data123/history'
+import historyData from '../../data/history'
 
 function HistoryTimeline() {
   return (
