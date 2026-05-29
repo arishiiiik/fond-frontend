@@ -29,8 +29,8 @@ import FondPage from './pages/FondPage'
 import ContactsPage from './pages/ContactsPage'
 import NotFoundPage from './pages/NotFoundPage'
 
-// Компонент, который содержит маршруты и использует useModal
-function AppContent() {
+// Компонент с маршрутами
+function AppRoutes() {
   const { modalType, isOpen, closeModal } = useModal()
   
   return (
@@ -45,7 +45,7 @@ function AppContent() {
         <Route path="/fond" element={<FondPage />} />
         <Route path="/contacts" element={<ContactsPage />} />
         
-        {/* Админ маршруты */}
+        {/* Админ маршруты - доступны только авторизованным */}
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={
           <PrivateRoute>
@@ -70,22 +70,17 @@ function AppContent() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       
-      {/* Модальное окно */}
-      <ModalManager 
-        modalType={modalType} 
-        isOpen={isOpen} 
-        onClose={closeModal} 
-      />
+      <ModalManager modalType={modalType} isOpen={isOpen} onClose={closeModal} />
     </>
   )
 }
 
-// Главный компонент App
+// Главный компонент
 function App() {
   return (
     <ModalProvider>
       <BrowserRouter>
-        <AppContent />
+        <AppRoutes />
       </BrowserRouter>
     </ModalProvider>
   )
