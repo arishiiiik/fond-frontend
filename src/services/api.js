@@ -1,10 +1,10 @@
 import axios from 'axios'
 
 // Используем переменную окружения, если есть, иначе локальный URL
-const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api'
-const MEDIA_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://127.0.0.1:8000'
+const API_URL = 'https://fond-backend.onrender.com/api'
+const MEDIA_URL = 'https://fond-backend.onrender.com'
 
-console.log('API_URL:', API_URL)  // для отладки — потом удали
+console.log('API_URL:', API_URL)
 
 const api = axios.create({
     baseURL: API_URL,
