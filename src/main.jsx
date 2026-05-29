@@ -2,7 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import './style.css'
-import './responsive.css'
 import './team.css'
 import './document.css'
 import './fond.css'
@@ -14,7 +13,6 @@ import './project_description.css'
 const redirectPath = sessionStorage.getItem('redirectPath');
 if (redirectPath && redirectPath !== '/') {
   sessionStorage.removeItem('redirectPath');
-  // Используем replace, чтобы не дублировать историю
   window.history.replaceState(null, '', redirectPath);
 }
 
