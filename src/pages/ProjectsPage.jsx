@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react'
+import api from '../services/api'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import HeroCarousel from '../components/HeroCarousel'
 import ProjectCard from '../components/ProjectCard'
-import { MEDIA_URL } from '../services/api'
-import api from '../services/api'
-
 
 function ProjectsPage() {
     const [projects, setProjects] = useState([])
@@ -13,9 +11,8 @@ function ProjectsPage() {
     const [error, setError] = useState(null)
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/api/projects/')
+        api.get('/projects/')
             .then(response => {
-                console.log('Загружено проектов:', response.data.length)
                 setProjects(response.data)
                 setLoading(false)
             })
@@ -26,25 +23,8 @@ function ProjectsPage() {
             })
     }, [])
 
-    if (loading) {
-        return (
-            <div>
-                <Header />
-                <div style={{ textAlign: 'center', padding: '100px' }}>Загрузка проектов...</div>
-                <Footer />
-            </div>
-        )
-    }
-
-    if (error) {
-        return (
-            <div>
-                <Header />
-                <div style={{ textAlign: 'center', padding: '100px', color: 'red' }}>{error}</div>
-                <Footer />
-            </div>
-        )
-    }
+    if (loading) return <div><Header /><div>Загрузка...</div><Footer /></div>
+    if (error) return <div><Header /><div>{error}</div><Footer /></div>
 
     return (
         <div>
@@ -59,17 +39,16 @@ function ProjectsPage() {
                         Вологодской области
                     </p>
                 </div>
-
                 <div className="project_catalog">
                     {projects.map(project => (
                         <ProjectCard
-                            key={project.id}  // ← КЛЮЧ ОБЯЗАТЕЛЬНО!
+                            key={project.id}
                             city={project.city}
                             title={project.title}
                             description={project.short_description}
                             status={project.status_display || project.status}
                             date={project.date}
-                            image={project.image_url}  // ← передаем image_url из API
+                            image={project.image_url}
                             slug={project.slug}
                         />
                     ))}
