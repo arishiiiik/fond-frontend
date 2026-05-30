@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import api, { MEDIA_URL } from '../services/api'
+import api from '../services/api'  // ← убрали MEDIA_URL
 import '../style.css'
 
 function PartnersSection() {
@@ -21,10 +21,6 @@ function PartnersSection() {
   if (loading) return null
   if (partners.length === 0) return null
 
-  const firstRow = partners.slice(0, 3)
-  const secondRow = partners.slice(3, 5)
-  const thirdRow = partners.slice(5, 8)
-
   return (
     <div className="partner_fond">
       <div className="zagolovok">
@@ -34,14 +30,10 @@ function PartnersSection() {
       </div>
       
       <div className="content_partner">
-        {firstRow.map(partner => (
+        {partners.map(partner => (
           <div key={partner.id} className="partner">
             {partner.logo && (
-              <img 
-                className="patner_img" 
-                src={`${MEDIA_URL}${partner.logo}`} 
-                alt={partner.name} 
-              />
+              <img className="patner_img" src={partner.logo} alt={partner.name} />
             )}
             <a className="partner_name" href={partner.link} target="_blank" rel="noopener noreferrer">
               {partner.name}
@@ -49,37 +41,6 @@ function PartnersSection() {
           </div>
         ))}
       </div>
-      
-      {secondRow.length > 0 && (
-        <div className="content_partner">
-          {secondRow.map(partner => (
-            <div key={partner.id} className="partner_long">
-              <a className="partner_name" href={partner.link} target="_blank" rel="noopener noreferrer">
-                {partner.name}
-              </a>
-            </div>
-          ))}
-        </div>
-      )}
-      
-      {thirdRow.length > 0 && (
-        <div className="content_partner">
-          {thirdRow.map(partner => (
-            <div key={partner.id} className="partner">
-              {partner.logo && (
-                <img 
-                  className="patner_img" 
-                  src={`${MEDIA_URL}${partner.logo}`} 
-                  alt={partner.name} 
-                />
-              )}
-              <a className="partner_name" href={partner.link} target="_blank" rel="noopener noreferrer">
-                {partner.name}
-              </a>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   )
 }
