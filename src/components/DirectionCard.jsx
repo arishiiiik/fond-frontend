@@ -1,9 +1,7 @@
 import '../style.css'
-import { MEDIA_URL } from '../services/api'
 
 function DirectionCard({ icon, title, description }) {
-  // Полный URL для изображения
-  const imageUrl = icon ? `${MEDIA_URL}${icon}` : null;
+  const imageUrl = icon || null
   
   return (
     <div className="card">

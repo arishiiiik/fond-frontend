@@ -1,8 +1,6 @@
 import axios from 'axios'
 
-// Используем переменную окружения, если есть, иначе локальный URL
 const API_URL = 'https://fond-backend.onrender.com/api'
-const MEDIA_URL = 'https://fond-backend.onrender.com'
 
 console.log('API_URL:', API_URL)
 
@@ -11,7 +9,6 @@ const api = axios.create({
     headers: { 'Content-Type': 'application/json' },
 })
 
-// Отдельный экземпляр axios для refresh токена
 const refreshAxios = axios.create({
     baseURL: API_URL,
 })
@@ -61,4 +58,3 @@ export const getTeam = () => api.get('/team/')
 export const getDocuments = () => api.get('/documents/')
 
 export default api
-export { MEDIA_URL }

@@ -1,25 +1,22 @@
-import { useModal } from '../context/ModalContext'
+import '../style.css'
 
-function HelpCard({ icon, title, description, buttonText, modalType }) {
-  const { openDonationModal, openPartnerModal, openVolunteerModal } = useModal()
-  
-  const handleClick = () => {
-    if (modalType === 'donation') openDonationModal()
-    else if (modalType === 'partner') openPartnerModal()
-    else if (modalType === 'volunteer') openVolunteerModal()
-    else alert('Форма в разработке')
-  }
+function ProjectCard({ city, title, description, status, date, image, slug }) {
+  const imageUrl = image || '/images/project/default.png'
+  const statusClass = status === "Активный" ? "status-active" : "status-completed"
   
   return (
-    <div className="help_block">
-      <img className="help_img" src={icon} alt={title} />
-      <h2 className="help_zag">{title}</h2>
-      <p className="help_description">{description}</p>
-      <button className="help_button" onClick={handleClick}>
-        {buttonText}
-      </button>
+    <div className="project">
+      <img className="project_img" src={imageUrl} alt={title} />
+      <div className="text_project">
+        <p className="city">{city}</p>
+        <h2 className="project_zag">{title}</h2>
+        <p className="project_description">{description}</p>
+        <p className={`date_project ${statusClass}`}>{date}</p>
+        <div className="line_project"></div>
+        <a className="button_detail" href={`/projects/${slug}`}>Подробнее</a>
+      </div>
     </div>
   )
 }
 
-export default HelpCard
+export default ProjectCard
