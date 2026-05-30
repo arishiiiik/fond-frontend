@@ -1,42 +1,50 @@
 import { useState, useEffect } from 'react'
 import api from '../../services/api'
 
-const inputStyle = {
-    width: '100%',
-    padding: '10px',
-    borderRadius: '8px',
-    border: '1px solid #cbd5e1',
-    fontSize: '14px',
-    boxSizing: 'border-box'
-}
-
 const buttonStyle = {
-    background: '#3b82f6',
+    background: 'linear-gradient(90deg, #419037 0%, #92BA52 100%)',
     color: 'white',
     border: 'none',
-    padding: '8px 16px',
-    borderRadius: '6px',
+    padding: '10px 20px',
+    borderRadius: '25px',
     cursor: 'pointer',
+    fontFamily: 'Montserrat-Bold, sans-serif',
     fontSize: '14px'
 }
 
 const deleteButton = {
-    background: '#ef4444',
+    background: '#e74c3c',
     color: 'white',
     border: 'none',
     padding: '8px 16px',
-    borderRadius: '6px',
+    borderRadius: '20px',
     cursor: 'pointer',
-    fontSize: '14px'
+    fontFamily: 'Montserrat-Bold, sans-serif',
+    fontSize: '12px'
+}
+
+const inputStyle = {
+    width: '100%',
+    padding: '12px',
+    borderRadius: '15px',
+    border: '2px solid #e0d5c0',
+    fontSize: '14px',
+    fontFamily: 'Montserrat-Regular, sans-serif',
+    boxSizing: 'border-box',
+    marginBottom: '12px'
+}
+
+const cardStyle = {
+    background: 'white',
+    borderRadius: '20px',
+    padding: '24px',
+    marginBottom: '24px',
+    boxShadow: '0px 0px 20px rgba(130, 91, 44, 0.1)',
+    borderTop: '4px solid #419037'
 }
 
 function AdminHomePage() {
-    const [home, setHome] = useState(null)
-    const [slides, setSlides] = useState([
-        { id: 1, title: '', text: '', buttonText: '', buttonLink: '/projects', bgImage: '' },
-        { id: 2, title: '', text: '', buttonText: '', buttonLink: '/projects', bgImage: '' },
-        { id: 3, title: '', text: '', buttonText: '', buttonLink: '/projects', bgImage: '' }
-    ])
+    const [slides, setSlides] = useState([])
     const [directions, setDirections] = useState([])
     const [news, setNews] = useState([])
     const [helpSection, setHelpSection] = useState(null)
@@ -45,14 +53,13 @@ function AdminHomePage() {
 
     useEffect(() => {
         Promise.all([
-            api.get('/home/'),
+            api.get('/hero-slides/'),
             api.get('/directions/'),
             api.get('/news/'),
             api.get('/help-section/'),
             api.get('/help-cards/')
-        ]).then(([homeRes, dirRes, newsRes, helpSecRes, cardsRes]) => {
-            const homeData = homeRes.data?.[0] || homeRes.data || {}
-            setHome(homeData)
+        ]).then(([slidesRes, dirRes, newsRes, helpSecRes, cardsRes]) => {
+            setSlides(slidesRes.data || [])
             setDirections(dirRes.data || [])
             setNews(newsRes.data || [])
             setHelpSection(helpSecRes.data?.[0] || helpSecRes.data || {})
@@ -64,43 +71,42 @@ function AdminHomePage() {
         })
     }, [])
 
-    const saveHome = async () => {
+    // CRUD слайдов
+    const addSlide = async () => {
         try {
-            if (home?.id) {
-                await api.put(`/home/${home.id}/`, home)
-            } else {
-                await api.post('/home/', home)
-            }
-            alert('Сохранено')
-        } catch (err) {
-            alert('Ошибка')
+            const res = await api.post('/hero-slides/', { title: 'Новый слайд', text: 'Текст слайда', button_text: 'Подробнее', button_link: '/projects', order: slides.length })
+            setSlides([...slides, res.data])
+        } catch (err) { alert('Ошибка') }
+    }
+
+    const updateSlide = async (id, field, value) => {
+        await api.patch(`/hero-slides/${id}/`, { [field]: value })
+        setSlides(slides.map(s => s.id === id ? { ...s, [field]: value } : s))
+    }
+
+    const deleteSlide = async (id) => {
+        if (confirm('Удалить слайд?')) {
+            await api.delete(`/hero-slides/${id}/`)
+            setSlides(slides.filter(s => s.id !== id))
         }
     }
 
-    const updateSlide = (index, field, value) => {
-        const newSlides = [...slides]
-        newSlides[index][field] = value
-        setSlides(newSlides)
-    }
-
-    const saveSlides = async () => {
-        // TODO: создать API эндпоинт для слайдов
-        alert('Слайды сохранены (требуется API)')
+    const uploadSlideImage = async (id, file) => {
+        const data = new FormData()
+        data.append('bg_image', file)
+        const res = await api.patch(`/hero-slides/${id}/`, data)
+        setSlides(slides.map(s => s.id === id ? { ...s, bg_image: res.data.bg_image } : s))
     }
 
     // CRUD направлений
     const addDirection = async () => {
-        try {
-            const res = await api.post('/directions/', { title: 'Новое направление', description: 'Описание', order: directions.length })
-            setDirections([...directions, res.data])
-        } catch (err) { alert('Ошибка') }
+        const res = await api.post('/directions/', { title: 'Новое направление', description: 'Описание', order: directions.length })
+        setDirections([...directions, res.data])
     }
 
     const updateDirection = async (id, field, value) => {
-        try {
-            await api.patch(`/directions/${id}/`, { [field]: value })
-            setDirections(directions.map(d => d.id === id ? { ...d, [field]: value } : d))
-        } catch (err) { console.error(err) }
+        await api.patch(`/directions/${id}/`, { [field]: value })
+        setDirections(directions.map(d => d.id === id ? { ...d, [field]: value } : d))
     }
 
     const deleteDirection = async (id) => {
@@ -112,17 +118,13 @@ function AdminHomePage() {
 
     // CRUD новостей
     const addNews = async () => {
-        try {
-            const res = await api.post('/news/', { title: 'Новая новость', description: 'Описание', date: new Date().toISOString().split('T')[0], order: news.length })
-            setNews([...news, res.data])
-        } catch (err) { alert('Ошибка') }
+        const res = await api.post('/news/', { title: 'Новая новость', description: 'Описание', date: new Date().toISOString().split('T')[0], order: news.length })
+        setNews([...news, res.data])
     }
 
     const updateNews = async (id, field, value) => {
-        try {
-            await api.patch(`/news/${id}/`, { [field]: value })
-            setNews(news.map(n => n.id === id ? { ...n, [field]: value } : n))
-        } catch (err) { console.error(err) }
+        await api.patch(`/news/${id}/`, { [field]: value })
+        setNews(news.map(n => n.id === id ? { ...n, [field]: value } : n))
     }
 
     const deleteNews = async (id) => {
@@ -134,17 +136,13 @@ function AdminHomePage() {
 
     // CRUD карточек помощи
     const addHelpCard = async () => {
-        try {
-            const res = await api.post('/help-cards/', { title: 'Новая карточка', description: 'Описание', button_text: 'Поддержать', button_type: 'donation', order: helpCards.length })
-            setHelpCards([...helpCards, res.data])
-        } catch (err) { alert('Ошибка') }
+        const res = await api.post('/help-cards/', { title: 'Новая карточка', description: 'Описание', button_text: 'Поддержать', button_type: 'donation', order: helpCards.length })
+        setHelpCards([...helpCards, res.data])
     }
 
     const updateHelpCard = async (id, field, value) => {
-        try {
-            await api.patch(`/help-cards/${id}/`, { [field]: value })
-            setHelpCards(helpCards.map(c => c.id === id ? { ...c, [field]: value } : c))
-        } catch (err) { console.error(err) }
+        await api.patch(`/help-cards/${id}/`, { [field]: value })
+        setHelpCards(helpCards.map(c => c.id === id ? { ...c, [field]: value } : c))
     }
 
     const deleteHelpCard = async (id) => {
@@ -155,95 +153,91 @@ function AdminHomePage() {
     }
 
     const saveHelpSection = async () => {
-        try {
-            if (helpSection?.id) {
-                await api.put(`/help-section/${helpSection.id}/`, helpSection)
-            } else {
-                await api.post('/help-section/', helpSection)
-            }
-            alert('Сохранено')
-        } catch (err) { alert('Ошибка') }
+        if (helpSection?.id) {
+            await api.put(`/help-section/${helpSection.id}/`, helpSection)
+        } else {
+            await api.post('/help-section/', helpSection)
+        }
+        alert('Сохранено')
     }
 
     if (loading) return <div>Загрузка...</div>
 
     return (
         <div>
-            <h1 style={{ fontSize: '24px', marginBottom: '24px' }}>Главная страница</h1>
+            <h1 style={{ fontFamily: 'Vezitsa, sans-serif', color: '#825B2C', fontSize: '32px', marginBottom: '24px' }}>Главная страница</h1>
 
-            {/* Hero слайдер (3 слайда) */}
-            <div style={{ background: 'white', borderRadius: '12px', padding: '24px', marginBottom: '24px' }}>
-                <h2 style={{ fontSize: '18px', marginBottom: '16px' }}>Hero-слайдер (3 слайда)</h2>
+            {/* Hero-слайдер */}
+            <div style={cardStyle}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                    <h2 style={{ fontFamily: 'Vezitsa, sans-serif', color: '#825B2C', fontSize: '24px' }}>Hero-слайдер</h2>
+                    <button onClick={addSlide} style={buttonStyle}>+ Добавить слайд</button>
+                </div>
                 {slides.map((slide, idx) => (
-                    <div key={idx} style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px', marginBottom: '16px' }}>
-                        <h3>Слайд {idx + 1}</h3>
-                        <div style={{ marginBottom: '12px' }}>
-                            <label style={{ display: 'block', marginBottom: '4px' }}>Заголовок</label>
-                            <input type="text" value={slide.title} onChange={e => updateSlide(idx, 'title', e.target.value)} style={inputStyle} />
+                    <div key={slide.id} style={{ border: '1px solid #e0d5c0', borderRadius: '15px', padding: '16px', marginBottom: '16px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+                            <strong>Слайд {idx + 1}</strong>
+                            <button onClick={() => deleteSlide(slide.id)} style={deleteButton}>Удалить</button>
                         </div>
-                        <div style={{ marginBottom: '12px' }}>
-                            <label style={{ display: 'block', marginBottom: '4px' }}>Текст</label>
-                            <textarea value={slide.text} onChange={e => updateSlide(idx, 'text', e.target.value)} rows={3} style={inputStyle} />
-                        </div>
-                        <div style={{ marginBottom: '12px' }}>
-                            <label style={{ display: 'block', marginBottom: '4px' }}>Текст кнопки</label>
-                            <input type="text" value={slide.buttonText} onChange={e => updateSlide(idx, 'buttonText', e.target.value)} style={inputStyle} />
-                        </div>
-                        <div style={{ marginBottom: '12px' }}>
-                            <label style={{ display: 'block', marginBottom: '4px' }}>Ссылка кнопки</label>
-                            <input type="text" value={slide.buttonLink} onChange={e => updateSlide(idx, 'buttonLink', e.target.value)} style={inputStyle} />
+                        <input type="text" placeholder="Заголовок" value={slide.title} onChange={e => updateSlide(slide.id, 'title', e.target.value)} style={inputStyle} />
+                        <textarea placeholder="Текст" value={slide.text} onChange={e => updateSlide(slide.id, 'text', e.target.value)} rows={3} style={inputStyle} />
+                        <input type="text" placeholder="Текст кнопки" value={slide.button_text} onChange={e => updateSlide(slide.id, 'button_text', e.target.value)} style={inputStyle} />
+                        <input type="text" placeholder="Ссылка кнопки" value={slide.button_link} onChange={e => updateSlide(slide.id, 'button_link', e.target.value)} style={inputStyle} />
+                        <div>
+                            <label>Фоновое изображение</label>
+                            {slide.bg_image && <img src={slide.bg_image} alt="preview" style={{ width: '100px', margin: '10px 0', borderRadius: '8px' }} />}
+                            <input type="file" accept="image/*" onChange={e => e.target.files[0] && uploadSlideImage(slide.id, e.target.files[0])} />
                         </div>
                     </div>
                 ))}
-                <button onClick={saveSlides} style={buttonStyle}>Сохранить слайды</button>
             </div>
 
             {/* Направления работы */}
-            <div style={{ background: 'white', borderRadius: '12px', padding: '24px', marginBottom: '24px' }}>
+            <div style={cardStyle}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                    <h2 style={{ fontSize: '18px' }}>Направления работы</h2>
+                    <h2 style={{ fontFamily: 'Vezitsa, sans-serif', color: '#825B2C', fontSize: '24px' }}>Направления работы</h2>
                     <button onClick={addDirection} style={buttonStyle}>+ Добавить</button>
                 </div>
                 {directions.map(dir => (
-                    <div key={dir.id} style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px', marginBottom: '16px' }}>
-                        <input type="text" value={dir.title} onChange={e => updateDirection(dir.id, 'title', e.target.value)} style={{ ...inputStyle, marginBottom: '8px' }} placeholder="Заголовок" />
-                        <textarea value={dir.description} onChange={e => updateDirection(dir.id, 'description', e.target.value)} rows={2} style={{ ...inputStyle, marginBottom: '8px' }} placeholder="Описание" />
+                    <div key={dir.id} style={{ border: '1px solid #e0d5c0', borderRadius: '15px', padding: '16px', marginBottom: '16px' }}>
+                        <input type="text" value={dir.title} onChange={e => updateDirection(dir.id, 'title', e.target.value)} style={inputStyle} placeholder="Заголовок" />
+                        <textarea value={dir.description} onChange={e => updateDirection(dir.id, 'description', e.target.value)} rows={2} style={inputStyle} placeholder="Описание" />
                         <button onClick={() => deleteDirection(dir.id)} style={deleteButton}>Удалить</button>
                     </div>
                 ))}
             </div>
 
             {/* Новости */}
-            <div style={{ background: 'white', borderRadius: '12px', padding: '24px', marginBottom: '24px' }}>
+            <div style={cardStyle}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                    <h2 style={{ fontSize: '18px' }}>Новости</h2>
+                    <h2 style={{ fontFamily: 'Vezitsa, sans-serif', color: '#825B2C', fontSize: '24px' }}>Новости</h2>
                     <button onClick={addNews} style={buttonStyle}>+ Добавить</button>
                 </div>
                 {news.map(item => (
-                    <div key={item.id} style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px', marginBottom: '16px' }}>
-                        <input type="text" value={item.title} onChange={e => updateNews(item.id, 'title', e.target.value)} style={{ ...inputStyle, marginBottom: '8px' }} placeholder="Заголовок" />
-                        <textarea value={item.description} onChange={e => updateNews(item.id, 'description', e.target.value)} rows={2} style={{ ...inputStyle, marginBottom: '8px' }} placeholder="Описание" />
-                        <input type="date" value={item.date} onChange={e => updateNews(item.id, 'date', e.target.value)} style={{ ...inputStyle, marginBottom: '8px' }} />
+                    <div key={item.id} style={{ border: '1px solid #e0d5c0', borderRadius: '15px', padding: '16px', marginBottom: '16px' }}>
+                        <input type="text" value={item.title} onChange={e => updateNews(item.id, 'title', e.target.value)} style={inputStyle} placeholder="Заголовок" />
+                        <textarea value={item.description} onChange={e => updateNews(item.id, 'description', e.target.value)} rows={2} style={inputStyle} placeholder="Описание" />
+                        <input type="date" value={item.date} onChange={e => updateNews(item.id, 'date', e.target.value)} style={inputStyle} />
                         <button onClick={() => deleteNews(item.id)} style={deleteButton}>Удалить</button>
                     </div>
                 ))}
             </div>
 
             {/* Блок помощи */}
-            <div style={{ background: 'white', borderRadius: '12px', padding: '24px', marginBottom: '24px' }}>
-                <h2 style={{ fontSize: '18px', marginBottom: '16px' }}>Блок "Как помочь фонду"</h2>
-                <input type="text" value={helpSection?.title || ''} onChange={e => setHelpSection({ ...helpSection, title: e.target.value })} style={{ ...inputStyle, marginBottom: '12px' }} placeholder="Заголовок" />
-                <textarea value={helpSection?.description || ''} onChange={e => setHelpSection({ ...helpSection, description: e.target.value })} rows={3} style={{ ...inputStyle, marginBottom: '12px' }} placeholder="Описание" />
+            <div style={cardStyle}>
+                <h2 style={{ fontFamily: 'Vezitsa, sans-serif', color: '#825B2C', fontSize: '24px', marginBottom: '16px' }}>Блок помощи</h2>
+                <input type="text" value={helpSection?.title || ''} onChange={e => setHelpSection({ ...helpSection, title: e.target.value })} style={inputStyle} placeholder="Заголовок" />
+                <textarea value={helpSection?.description || ''} onChange={e => setHelpSection({ ...helpSection, description: e.target.value })} rows={3} style={inputStyle} placeholder="Описание" />
                 <button onClick={saveHelpSection} style={buttonStyle}>Сохранить блок</button>
 
-                <h3 style={{ fontSize: '16px', margin: '16px 0 12px' }}>Карточки помощи</h3>
-                <button onClick={addHelpCard} style={{ ...buttonStyle, background: '#22c55e', marginBottom: '16px' }}>+ Добавить карточку</button>
+                <h3 style={{ margin: '16px 0 12px', fontSize: '18px', color: '#825B2C' }}>Карточки помощи</h3>
+                <button onClick={addHelpCard} style={{ ...buttonStyle, marginBottom: '16px' }}>+ Добавить карточку</button>
                 {helpCards.map(card => (
-                    <div key={card.id} style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px', marginBottom: '16px' }}>
-                        <input type="text" value={card.title} onChange={e => updateHelpCard(card.id, 'title', e.target.value)} style={{ ...inputStyle, marginBottom: '8px' }} placeholder="Заголовок" />
-                        <textarea value={card.description} onChange={e => updateHelpCard(card.id, 'description', e.target.value)} rows={2} style={{ ...inputStyle, marginBottom: '8px' }} placeholder="Описание" />
-                        <input type="text" value={card.button_text} onChange={e => updateHelpCard(card.id, 'button_text', e.target.value)} style={{ ...inputStyle, marginBottom: '8px' }} placeholder="Текст кнопки" />
-                        <select value={card.button_type} onChange={e => updateHelpCard(card.id, 'button_type', e.target.value)} style={{ ...inputStyle, marginBottom: '8px' }}>
+                    <div key={card.id} style={{ border: '1px solid #e0d5c0', borderRadius: '15px', padding: '16px', marginBottom: '16px' }}>
+                        <input type="text" value={card.title} onChange={e => updateHelpCard(card.id, 'title', e.target.value)} style={inputStyle} placeholder="Заголовок" />
+                        <textarea value={card.description} onChange={e => updateHelpCard(card.id, 'description', e.target.value)} rows={2} style={inputStyle} placeholder="Описание" />
+                        <input type="text" value={card.button_text} onChange={e => updateHelpCard(card.id, 'button_text', e.target.value)} style={inputStyle} />
+                        <select value={card.button_type} onChange={e => updateHelpCard(card.id, 'button_type', e.target.value)} style={inputStyle}>
                             <option value="donation">Пожертвование</option>
                             <option value="partner">Партнёрство</option>
                             <option value="volunteer">Волонтёрство</option>

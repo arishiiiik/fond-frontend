@@ -16,76 +16,71 @@ function AdminLayout() {
         <div style={{
             display: 'flex',
             minHeight: '100vh',
-            background: '#f1f5f9',
-            fontFamily: 'system-ui, -apple-system, sans-serif'
+            background: '#fffcea',
+            fontFamily: 'Montserrat-Regular, sans-serif'
         }}>
             <aside style={{
-                width: '260px',
-                background: '#0f172a',
-                color: '#e2e8f0',
+                width: '280px',
+                background: '#7E5B2C',
+                color: '#FFFCEA',
+                padding: '30px 20px',
                 display: 'flex',
                 flexDirection: 'column'
             }}>
-                <div style={{ padding: '24px 20px', borderBottom: '1px solid #334155' }}>
-                    <h2 style={{ fontSize: '16px', margin: 0, fontWeight: 600 }}>Земля Вологодская</h2>
-                    <p style={{ fontSize: '12px', opacity: 0.6, marginTop: '4px' }}>Административная панель</p>
+                <div style={{ marginBottom: '40px', textAlign: 'center' }}>
+                    <img src="/images/logo.png" alt="Логотип" style={{ width: '80px', marginBottom: '15px' }} />
+                    <h2 style={{ fontFamily: 'Vezitsa, sans-serif', fontSize: '20px', margin: 0 }}>Админ-панель</h2>
+                    <p style={{ fontSize: '12px', opacity: 0.8, marginTop: '5px' }}>Фонд "Земля Вологодская"</p>
                 </div>
-                
-                <nav style={{ flex: 1, padding: '20px 12px' }}>
-                    <NavSection title="Основные страницы">
+
+                <nav style={{ flex: 1 }}>
+                    <div style={{ marginBottom: '20px' }}>
+                        <h3 style={{ fontSize: '14px', opacity: 0.7, marginBottom: '10px' }}>ОСНОВНЫЕ СТРАНИЦЫ</h3>
                         <NavLink to="/admin/home" active={isActive('/admin/home')}>Главная страница</NavLink>
                         <NavLink to="/admin/fond" active={isActive('/admin/fond')}>О фонде</NavLink>
-                    </NavSection>
+                    </div>
 
-                    <NavSection title="Контент">
+                    <div style={{ marginBottom: '20px' }}>
+                        <h3 style={{ fontSize: '14px', opacity: 0.7, marginBottom: '10px' }}>КОНТЕНТ</h3>
                         <NavLink to="/admin/projects" active={isActive('/admin/projects')}>Проекты</NavLink>
                         <NavLink to="/admin/news" active={isActive('/admin/news')}>Новости</NavLink>
                         <NavLink to="/admin/team" active={isActive('/admin/team')}>Команда</NavLink>
                         <NavLink to="/admin/partners" active={isActive('/admin/partners')}>Партнёры</NavLink>
                         <NavLink to="/admin/documents" active={isActive('/admin/documents')}>Документы</NavLink>
                         <NavLink to="/admin/directions" active={isActive('/admin/directions')}>Направления</NavLink>
-                    </NavSection>
+                    </div>
 
-                    <NavSection title="Заявки">
+                    <div style={{ marginBottom: '20px' }}>
+                        <h3 style={{ fontSize: '14px', opacity: 0.7, marginBottom: '10px' }}>ЗАЯВКИ</h3>
                         <NavLink to="/admin/donations" active={isActive('/admin/donations')}>Пожертвования</NavLink>
                         <NavLink to="/admin/partner-requests" active={isActive('/admin/partner-requests')}>Партнёрство</NavLink>
                         <NavLink to="/admin/volunteers" active={isActive('/admin/volunteers')}>Волонтёры</NavLink>
-                    </NavSection>
+                    </div>
 
-                    <NavSection title="Настройки">
+                    <div style={{ marginBottom: '20px' }}>
+                        <h3 style={{ fontSize: '14px', opacity: 0.7, marginBottom: '10px' }}>НАСТРОЙКИ</h3>
                         <NavLink to="/admin/contacts" active={isActive('/admin/contacts')}>Контакты</NavLink>
-                    </NavSection>
+                    </div>
                 </nav>
-                
+
                 <button onClick={logout} style={{
-                    margin: '16px',
-                    padding: '10px',
-                    background: '#ef4444',
+                    padding: '12px',
+                    background: '#419037',
                     color: 'white',
                     border: 'none',
-                    borderRadius: '8px',
+                    borderRadius: '25px',
                     cursor: 'pointer',
+                    fontFamily: 'Montserrat-Bold, sans-serif',
                     fontSize: '14px',
-                    fontWeight: 500
+                    marginTop: '20px'
                 }}>
                     Выйти
                 </button>
             </aside>
-            
-            <main style={{ flex: 1, padding: '32px 40px', overflow: 'auto' }}>
+
+            <main style={{ flex: 1, padding: '30px', overflow: 'auto' }}>
                 <Outlet />
             </main>
-        </div>
-    )
-}
-
-function NavSection({ title, children }) {
-    return (
-        <div style={{ marginBottom: '24px' }}>
-            <h3 style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', opacity: 0.5, marginBottom: '12px' }}>
-                {title}
-            </h3>
-            {children}
         </div>
     )
 }
@@ -96,13 +91,13 @@ function NavLink({ to, active, children }) {
             to={to}
             style={{
                 display: 'block',
-                padding: '8px 12px',
-                marginBottom: '4px',
-                color: active ? 'white' : '#cbd5e1',
-                background: active ? '#3b82f6' : 'transparent',
+                padding: '10px 15px',
+                color: active ? 'white' : '#FFFCEA',
+                background: active ? '#419037' : 'transparent',
                 textDecoration: 'none',
-                borderRadius: '6px',
-                fontSize: '14px'
+                borderRadius: '12px',
+                marginBottom: '5px',
+                transition: 'all 0.3s'
             }}
         >
             {children}
