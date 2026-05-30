@@ -1,32 +1,52 @@
 import { useState, useEffect } from 'react'
-import api from '../../services/api.js'
+import api from '../../services/api'
+
+const buttonStyle = {
+    background: '#3b82f6',
+    color: 'white',
+    border: 'none',
+    padding: '8px 16px',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    fontSize: '14px'
+}
+
+const deleteButton = {
+    background: '#ef4444',
+    color: 'white',
+    border: 'none',
+    padding: '8px 16px',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    fontSize: '14px'
+}
+
+const inputStyle = {
+    width: '100%',
+    padding: '10px',
+    borderRadius: '8px',
+    border: '1px solid #cbd5e1',
+    fontSize: '14px',
+    boxSizing: 'border-box'
+}
 
 function AdminDirections() {
-    const [directions, setDirections] = useState([])
+    const [items, setItems] = useState([])
     const [loading, setLoading] = useState(true)
     const [showForm, setShowForm] = useState(false)
     const [editing, setEditing] = useState(null)
-    const [imageFile, setImageFile] = useState(null)
     const [form, setForm] = useState({ title: '', description: '', order: 0 })
+    const [imageFile, setImageFile] = useState(null)
     const [saving, setSaving] = useState(false)
 
-    const loadDirections = async () => {
-        try {
-            const res = await api.get('/directions/')
-            setDirections(Array.isArray(res.data) ? res.data : [])
-        } catch (err) {
-            console.error('Ошибка загрузки:', err)
-        } finally {
-            setLoading(false)
-        }
-    }
+    useEffect(() => {
+        api.get('/directions/').then(res => { setItems(res.data); setLoading(false) }).catch(() => setLoading(false))
+    }, [])
 
-    useEffect(() => { loadDirections() }, [])
-
-    const openForm = (dir = null) => {
-        if (dir) {
-            setForm({ title: dir.title || '', description: dir.description || '', order: dir.order || 0 })
-            setEditing(dir)
+    const openForm = (item = null) => {
+        if (item) {
+            setForm(item)
+            setEditing(item)
         } else {
             setForm({ title: '', description: '', order: 0 })
             setEditing(null)
@@ -46,15 +66,16 @@ function AdminDirections() {
 
         try {
             if (editing) {
-                await api.put(`/directions/${editing.id}/`, data, { headers: { 'Content-Type': 'multipart/form-data' } })
+                await api.put(`/directions/${editing.id}/`, data)
             } else {
-                await api.post('/directions/', data, { headers: { 'Content-Type': 'multipart/form-data' } })
+                await api.post('/directions/', data)
             }
             setShowForm(false)
-            loadDirections()
-            alert('Сохранено!')
+            const res = await api.get('/directions/')
+            setItems(res.data)
+            alert('Сохранено')
         } catch (err) {
-            alert('Ошибка при сохранении')
+            alert('Ошибка')
         }
         setSaving(false)
     }
@@ -62,7 +83,8 @@ function AdminDirections() {
     const handleDelete = async (id) => {
         if (confirm('Удалить направление?')) {
             await api.delete(`/directions/${id}/`)
-            loadDirections()
+            const res = await api.get('/directions/')
+            setItems(res.data)
         }
     }
 
@@ -70,25 +92,70 @@ function AdminDirections() {
 
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-                <h1>Направления работы</h1>
-                <button onClick={() => openForm()} style={{ background: '#419037', color: 'white', padding: '8px 16px', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>
-                    + Добавить направление
-                </button>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                <h1 style={{ fontSize: '24px' }}>Направления работы</h1>
+                <button onClick={() => openForm()} style={buttonStyle}>+ Добавить направление</button>
             </div>
-            {directions.map(dir => (
-                <div key={dir.id} style={{ border: '1px solid #ddd', padding: '15px', marginBottom: '10px', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div>
-                        {dir.icon_url && <img src={`http://127.0.0.1:8000${dir.icon_url}`} alt="" style={{ width: '40px', height: '40px', marginRight: '15px' }} />}
-                        <strong>{dir.title}</strong>
-                        <p style={{ margin: '5px 0 0', color: '#666' }}>{dir.description}</p>
-                    </div>
-                    <div>
-                        <button onClick={() => openForm(dir)} style={{ marginRight: '5px' }}>✏️</button>
-                        <button onClick={() => handleDelete(dir.id)}>🗑️</button>
+
+            <div style={{ background: 'white', borderRadius: '12px', overflow: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <thead style={{ background: '#f8fafc' }}>
+                        <tr>
+                            <th style={{ padding: '12px', textAlign: 'left' }}>Название</th>
+                            <th style={{ padding: '12px', textAlign: 'left' }}>Описание</th>
+                            <th style={{ padding: '12px', textAlign: 'left' }}>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {items.map(item => (
+                            <tr key={item.id} style={{ borderBottom: '1px solid #e2e8f0' }}>
+                                <td style={{ padding: '12px' }}>{item.title}</td>
+                                <td style={{ padding: '12px' }}>{item.description?.substring(0, 50)}...</td>
+                                <td style={{ padding: '12px' }}>
+                                    <button onClick={() => openForm(item)} style={{ ...buttonStyle, marginRight: '8px', padding: '4px 12px' }}>✏️</button>
+                                    <button onClick={() => handleDelete(item.id)} style={{ ...deleteButton, padding: '4px 12px' }}>🗑️</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+            {showForm && (
+                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }} onClick={() => setShowForm(false)}>
+                    <div style={{ background: 'white', borderRadius: '12px', width: '500px', maxWidth: '90%', maxHeight: '90%', overflow: 'auto' }} onClick={e => e.stopPropagation()}>
+                        <div style={{ padding: '16px', borderBottom: '1px solid #ddd', display: 'flex', justifyContent: 'space-between' }}>
+                            <h2>{editing ? 'Редактировать направление' : 'Новое направление'}</h2>
+                            <button onClick={() => setShowForm(false)} style={{ background: 'none', border: 'none', fontSize: '24px', cursor: 'pointer' }}>×</button>
+                        </div>
+                        <form onSubmit={handleSubmit}>
+                            <div style={{ padding: '24px' }}>
+                                <div style={{ marginBottom: '16px' }}>
+                                    <label>Название *</label>
+                                    <input type="text" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} required style={inputStyle} />
+                                </div>
+                                <div style={{ marginBottom: '16px' }}>
+                                    <label>Описание *</label>
+                                    <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} rows={3} required style={inputStyle} />
+                                </div>
+                                <div style={{ marginBottom: '16px' }}>
+                                    <label>Изображение</label>
+                                    <input type="file" accept="image/*" onChange={e => setImageFile(e.target.files[0])} />
+                                    {editing && editing.icon_url && !imageFile && <p style={{ fontSize: '12px', marginTop: '4px' }}>Текущее: {editing.icon_url.split('/').pop()}</p>}
+                                </div>
+                                <div style={{ marginBottom: '16px' }}>
+                                    <label>Порядок</label>
+                                    <input type="number" value={form.order} onChange={e => setForm({ ...form, order: parseInt(e.target.value) || 0 })} style={inputStyle} />
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+                                    <button type="button" onClick={() => setShowForm(false)} style={{ ...buttonStyle, background: '#94a3b8' }}>Отмена</button>
+                                    <button type="submit" disabled={saving} style={buttonStyle}>{saving ? 'Сохранение...' : 'Сохранить'}</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            ))}
+            )}
         </div>
     )
 }
