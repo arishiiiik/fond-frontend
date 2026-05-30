@@ -1,7 +1,7 @@
 import '../style.css'
 
 function ProjectCard({ city, title, description, status, date, image, slug }) {
-  const imageUrl = image || '/images/project/default.png'
+  const imageUrl = image || 'https://placehold.co/400x300/e2e8f0/825B2C?text=%D0%9D%D0%B5%D1%82+%D1%84%D0%BE%D1%82%D0%BE'
   const statusClass = status === "Активный" ? "status-active" : "status-completed"
   
   return (
