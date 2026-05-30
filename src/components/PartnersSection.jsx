@@ -36,10 +36,10 @@ function PartnersSection() {
       <div className="content_partner">
         {firstRow.map(partner => (
           <div key={partner.id} className="partner">
-            {partner.logo_url && (
+            {partner.logo && (
               <img 
                 className="patner_img" 
-                src={`${MEDIA_URL}${partner.logo_url}`} 
+                src={`${MEDIA_URL}${partner.logo}`} 
                 alt={partner.name} 
               />
             )}
@@ -66,10 +66,10 @@ function PartnersSection() {
         <div className="content_partner">
           {thirdRow.map(partner => (
             <div key={partner.id} className="partner">
-              {partner.logo_url && (
+              {partner.logo && (
                 <img 
                   className="patner_img" 
-                  src={`${MEDIA_URL}${partner.logo_url}`} 
+                  src={`${MEDIA_URL}${partner.logo}`} 
                   alt={partner.name} 
                 />
               )}

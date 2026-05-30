@@ -2,6 +2,7 @@ import '../../style.css'
 import '../../team.css'
 
 function TeamCard({ name, position, email, phone, vk, photo }) {
+  const photoUrl = photo ? `${MEDIA_URL}${photo}` : '/images/team/default.png'
   return (
     <div className="team_cart">
       <div className="team_img">

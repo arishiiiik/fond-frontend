@@ -51,7 +51,7 @@ function NewsSection() {
             date={formatDate(item.date)}
             title={item.title}
             description={item.description}
-            image={item.image_url}  // ← используем image_url из API
+            image={item.image}  // ← используем image_url из API
             link={item.link || '#'}
           />
         ))}

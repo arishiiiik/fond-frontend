@@ -50,7 +50,7 @@ function HelpSection() {
         {helpCards.map(card => (
           <HelpCard
             key={card.id}
-            icon={card.icon_url}  // ← используем icon_url из API
+            icon={card.icon}  // ← используем icon_url из API
             title={card.title}
             description={card.description}
             buttonText={card.button_text}

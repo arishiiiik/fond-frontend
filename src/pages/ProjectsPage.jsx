@@ -48,7 +48,7 @@ function ProjectsPage() {
                             description={project.short_description}
                             status={project.status_display || project.status}
                             date={project.date}
-                            image={project.image_url}
+                            image={project.image}
                             slug={project.slug}
                         />
                     ))}

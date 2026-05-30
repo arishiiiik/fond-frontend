@@ -1,6 +1,7 @@
-import { useModal } from '../context/ModalContext'
+import { MEDIA_URL } from '../services/api'
 
 function HelpCard({ icon, title, description, buttonText, modalType }) {
+  const imageUrl = icon ? `${MEDIA_URL}${icon}` : null
   const { openDonationModal, openPartnerModal, openVolunteerModal } = useModal()
   
   const handleClick = () => {
@@ -12,7 +13,7 @@ function HelpCard({ icon, title, description, buttonText, modalType }) {
   
   return (
     <div className="help_block">
-      <img className="help_img" src={icon} alt={title} />
+      {imageUrl && <img className="help_img" src={imageUrl} alt={title} />}
       <h2 className="help_zag">{title}</h2>
       <p className="help_description">{description}</p>
       <button className="help_button" onClick={handleClick}>
@@ -21,5 +22,3 @@ function HelpCard({ icon, title, description, buttonText, modalType }) {
     </div>
   )
 }
-
-export default HelpCard

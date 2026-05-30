@@ -53,8 +53,8 @@ function TeamPage() {
                             position={member.position}
                             email={member.email}
                             phone={member.phone}
-                            vk={member.vk_url}
-                            photo={member.photo_url || '/images/team/default.png'}
+                            vk={member.vkl}
+                            photo={member.photo || '/images/team/default.png'}
                         />
                     ))}
                 </div>

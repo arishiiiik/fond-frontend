@@ -38,7 +38,7 @@ function ProjectsSection() {
             title={project.title}
             description={project.short_description}
             status={project.status_display || project.status}
-            image={project.image_url}
+            image={project.image}
             slug={project.slug}
           />
         ))}
