@@ -74,7 +74,10 @@ function AdminProjects() {
     const [loading, setLoading] = useState(true)
     const [showForm, setShowForm] = useState(false)
     const [editing, setEditing] = useState(null)
-    const [form, setForm] = useState({ title: '', slug: '', city: '', short_description: '', full_description: '', status: 'active', date: '', goal: '', beneficiaries: '', order: 0 })
+    const [form, setForm] = useState({
+        title: '', slug: '', city: '', short_description: '', full_description: '',
+        status: 'active', date: '', goal: '', beneficiaries: '', order: 0
+    })
     const [imageFile, setImageFile] = useState(null)
     const [saving, setSaving] = useState(false)
 
@@ -84,10 +87,24 @@ function AdminProjects() {
 
     const openForm = (item = null) => {
         if (item) {
-            setForm(item)
+            setForm({
+                title: item.title || '',
+                slug: item.slug || '',
+                city: item.city || '',
+                short_description: item.short_description || '',
+                full_description: item.full_description || '',
+                status: item.status || 'active',
+                date: item.date || '',
+                goal: item.goal || '',
+                beneficiaries: item.beneficiaries || '',
+                order: item.order || 0
+            })
             setEditing(item)
         } else {
-            setForm({ title: '', slug: '', city: '', short_description: '', full_description: '', status: 'active', date: '', goal: '', beneficiaries: '', order: 0 })
+            setForm({
+                title: '', slug: '', city: '', short_description: '', full_description: '',
+                status: 'active', date: '', goal: '', beneficiaries: '', order: 0
+            })
             setEditing(null)
         }
         setImageFile(null)
@@ -98,7 +115,11 @@ function AdminProjects() {
         e.preventDefault()
         setSaving(true)
         const data = new FormData()
-        if (!editing) data.append('slug', form.slug)
+        
+        // slug отправляем ТОЛЬКО при создании нового проекта
+        if (!editing) {
+            data.append('slug', form.slug)
+        }
         data.append('title', form.title)
         data.append('city', form.city)
         data.append('short_description', form.short_description)
@@ -108,19 +129,23 @@ function AdminProjects() {
         data.append('goal', form.goal)
         data.append('beneficiaries', form.beneficiaries)
         data.append('order', form.order)
-        if (imageFile) data.append('image', imageFile)
+        if (imageFile) {
+            data.append('image', imageFile)
+        }
 
         try {
             if (editing) {
                 await api.put(`/projects/${editing.slug}/`, data)
+                alert('Проект обновлён')
             } else {
                 await api.post('/projects/', data)
+                alert('Проект создан')
             }
             setShowForm(false)
             const res = await api.get('/projects/')
             setItems(res.data)
-            alert('Сохранено')
         } catch (err) {
+            console.error(err)
             alert('Ошибка: ' + (err.response?.data?.detail || err.message))
         }
         setSaving(false)
@@ -131,6 +156,7 @@ function AdminProjects() {
             await api.delete(`/projects/${slug}/`)
             const res = await api.get('/projects/')
             setItems(res.data)
+            alert('Проект удалён')
         }
     }
 
@@ -186,14 +212,20 @@ function AdminProjects() {
                         <Field label="Цель" value={form.goal} onChange={val => setForm({ ...form, goal: val })} />
                         <Field label="Бенефициары" value={form.beneficiaries} onChange={val => setForm({ ...form, beneficiaries: val })} />
                         <Field label="Порядок" type="number" value={form.order} onChange={val => setForm({ ...form, order: parseInt(val) || 0 })} />
+                        
                         <div style={{ marginBottom: '16px' }}>
                             <label style={{ display: 'block', marginBottom: '6px', fontWeight: 500 }}>Изображение</label>
                             <input type="file" accept="image/*" onChange={e => setImageFile(e.target.files[0])} />
-                            {editing && editing.image_url && !imageFile && <p style={{ fontSize: '12px', marginTop: '4px' }}>Текущее: {editing.image_url.split('/').pop()}</p>}
+                            {editing && editing.image_url && !imageFile && (
+                                <p style={{ fontSize: '12px', marginTop: '4px' }}>Текущее: {editing.image_url.split('/').pop()}</p>
+                            )}
                         </div>
+
                         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
                             <button type="button" onClick={() => setShowForm(false)} style={{ ...buttonStyle, background: '#94a3b8' }}>Отмена</button>
-                            <button type="submit" disabled={saving} style={buttonStyle}>{saving ? 'Сохранение...' : 'Сохранить'}</button>
+                            <button type="submit" disabled={saving} style={buttonStyle}>
+                                {saving ? 'Сохранение...' : 'Сохранить'}
+                            </button>
                         </div>
                     </form>
                 </Modal>
