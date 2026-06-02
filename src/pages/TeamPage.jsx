@@ -3,7 +3,7 @@ import { getTeam } from '../services/api'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import HeroCarousel from '../components/HeroCarousel'
-import TeamCard from '../components/team/TeamCard'  // ← исправленный путь
+import TeamCard from '../components/team/TeamCard'
 import '../style.css'
 import '../team.css'
 
@@ -47,14 +47,14 @@ function TeamPage() {
 
                 <div className="team_list">
                     {team.map(member => (
-                        <TeamCard 
+                        <TeamCard
                             key={member.id}
                             name={member.name}
                             position={member.position}
                             email={member.email}
                             phone={member.phone}
-                            vk={member.vkl}
-                            photo={member.photo || '/images/team/default.png'}
+                            vk={member.vk_url}
+                            photo={member.photo_url || '/images/team/default.png'}
                         />
                     ))}
                 </div>
