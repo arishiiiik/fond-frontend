@@ -47,17 +47,21 @@ function AdminFondPage() {
     const [fond, setFond] = useState(null)
     const [history, setHistory] = useState([])
     const [loading, setLoading] = useState(true)
+    const [editingHistory, setEditingHistory] = useState(null)
+    const [historyForm, setHistoryForm] = useState({ year: '', title: '', description: '', side: 'left', order: 0 })
+    const [saving, setSaving] = useState(false)
 
     useEffect(() => {
-        Promise.all([api.get('/fond/'), api.get('/history/')])
-            .then(([fondRes, historyRes]) => {
-                const fondData = fondRes.data?.[0] || fondRes.data || {}
-                setFond(fondData)
-                setHistory(historyRes.data || [])
-                setLoading(false)
-            })
-            .catch(err => { console.error(err); setLoading(false) })
+        loadData()
     }, [])
+
+    const loadData = async () => {
+        const [fondRes, historyRes] = await Promise.all([api.get('/fond/'), api.get('/history/')])
+        const fondData = fondRes.data?.[0] || fondRes.data || {}
+        setFond(fondData)
+        setHistory(historyRes.data || [])
+        setLoading(false)
+    }
 
     const saveFond = async () => {
         try {
@@ -70,20 +74,48 @@ function AdminFondPage() {
         } catch (err) { alert('Ошибка') }
     }
 
-    const addHistory = async () => {
-        const res = await api.post('/history/', { year: new Date().getFullYear(), title: 'Новое событие', description: '', side: 'left', order: history.length })
-        setHistory([...history, res.data])
+    const openHistoryForm = (item = null) => {
+        if (item) {
+            setEditingHistory(item)
+            setHistoryForm({
+                year: item.year || '',
+                title: item.title || '',
+                description: item.description || '',
+                side: item.side || 'left',
+                order: item.order || 0
+            })
+        } else {
+            setEditingHistory({})
+            setHistoryForm({ year: '', title: '', description: '', side: 'left', order: history.length })
+        }
     }
 
-    const updateHistory = async (id, field, value) => {
-        await api.patch(`/history/${id}/`, { [field]: value })
-        setHistory(history.map(h => h.id === id ? { ...h, [field]: value } : h))
+    const closeHistoryForm = () => {
+        setEditingHistory(null)
+        setHistoryForm({ year: '', title: '', description: '', side: 'left', order: 0 })
+    }
+
+    const saveHistory = async (e) => {
+        e.preventDefault()
+        setSaving(true)
+        try {
+            if (editingHistory.id) {
+                await api.put(`/history/${editingHistory.id}/`, historyForm)
+                alert('Событие обновлено')
+            } else {
+                await api.post('/history/', historyForm)
+                alert('Событие добавлено')
+            }
+            closeHistoryForm()
+            loadData()
+        } catch (err) { alert('Ошибка') }
+        setSaving(false)
     }
 
     const deleteHistory = async (id) => {
         if (confirm('Удалить событие?')) {
             await api.delete(`/history/${id}/`)
-            setHistory(history.filter(h => h.id !== id))
+            loadData()
         }
     }
 
@@ -102,23 +134,49 @@ function AdminFondPage() {
             <div style={cardStyle}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                     <h2 style={{ fontFamily: 'Vezitsa, sans-serif', color: '#825B2C', fontSize: '24px' }}>История фонда</h2>
-                    <button onClick={addHistory} style={buttonStyle}>+ Добавить событие</button>
+                    <button onClick={() => openHistoryForm()} style={buttonStyle}>+ Добавить событие</button>
                 </div>
                 {history.map(item => (
                     <div key={item.id} style={{ border: '1px solid #e0d5c0', borderRadius: '15px', padding: '16px', marginBottom: '16px' }}>
-                        <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
-                            <input type="number" value={item.year} onChange={e => updateHistory(item.id, 'year', parseInt(e.target.value))} style={{ ...inputStyle, width: '100px' }} placeholder="Год" />
-                            <select value={item.side} onChange={e => updateHistory(item.id, 'side', e.target.value)} style={{ ...inputStyle, width: '120px' }}>
-                                <option value="left">Слева</option>
-                                <option value="right">Справа</option>
-                            </select>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                            <strong>{item.year} - {item.title}</strong>
+                            <div>
+                                <button onClick={() => openHistoryForm(item)} style={{ ...buttonStyle, padding: '4px 12px', marginRight: '8px' }}>✏️</button>
+                                <button onClick={() => deleteHistory(item.id)} style={deleteButton}>🗑️</button>
+                            </div>
                         </div>
-                        <input type="text" value={item.title} onChange={e => updateHistory(item.id, 'title', e.target.value)} style={inputStyle} placeholder="Заголовок" />
-                        <textarea value={item.description} onChange={e => updateHistory(item.id, 'description', e.target.value)} rows={3} style={inputStyle} placeholder="Описание" />
-                        <button onClick={() => deleteHistory(item.id)} style={deleteButton}>Удалить</button>
+                        <p>{item.description}</p>
+                        <small>Сторона: {item.side === 'left' ? 'Слева' : 'Справа'}</small>
                     </div>
                 ))}
             </div>
+
+            {/* Форма редактирования/добавления события истории */}
+            {editingHistory !== null && (
+                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }} onClick={closeHistoryForm}>
+                    <div style={{ background: 'white', borderRadius: '20px', width: '500px', maxWidth: '90%', maxHeight: '90%', overflow: 'auto' }} onClick={e => e.stopPropagation()}>
+                        <div style={{ padding: '20px', borderBottom: '1px solid #e0d5c0', background: '#fffcea' }}>
+                            <h2 style={{ fontFamily: 'Vezitsa, sans-serif', color: '#825B2C' }}>{editingHistory.id ? 'Редактировать событие' : 'Новое событие'}</h2>
+                        </div>
+                        <form onSubmit={saveHistory}>
+                            <div style={{ padding: '24px' }}>
+                                <input type="number" placeholder="Год" value={historyForm.year} onChange={e => setHistoryForm({ ...historyForm, year: e.target.value })} required style={inputStyle} />
+                                <input type="text" placeholder="Заголовок" value={historyForm.title} onChange={e => setHistoryForm({ ...historyForm, title: e.target.value })} required style={inputStyle} />
+                                <textarea placeholder="Описание" value={historyForm.description} onChange={e => setHistoryForm({ ...historyForm, description: e.target.value })} rows={3} required style={inputStyle} />
+                                <select value={historyForm.side} onChange={e => setHistoryForm({ ...historyForm, side: e.target.value })} style={inputStyle}>
+                                    <option value="left">Слева</option>
+                                    <option value="right">Справа</option>
+                                </select>
+                                <input type="number" placeholder="Порядок" value={historyForm.order} onChange={e => setHistoryForm({ ...historyForm, order: parseInt(e.target.value) || 0 })} style={inputStyle} />
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '16px' }}>
+                                    <button type="button" onClick={closeHistoryForm} style={{ ...buttonStyle, background: '#94a3b8' }}>Отмена</button>
+                                    <button type="submit" disabled={saving} style={buttonStyle}>{saving ? 'Сохранение...' : 'Сохранить'}</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
