@@ -1,8 +1,15 @@
 import '../style.css'
 
 function ProjectCard({ city, title, description, status, date, image, slug }) {
+  const getImageUrl = () => {
+    if (image && image !== 'null' && image !== '') {
+      return image
+    }
+    return `/images/projects/${slug}.png`
+  }
+  
   const fallbackImage = '/images/placeholder.jpg'
-  const imageUrl = image || `/images/projects/${slug}.png`
+  const imageUrl = getImageUrl()
   const statusClass = status === "Активный" ? "status-active" : "status-completed"
   
   const handleError = (e) => {
