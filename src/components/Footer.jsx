@@ -5,7 +5,6 @@ import '../style.css'
 function Footer() {
   const currentYear = new Date().getFullYear()
 
-  // Скрипт для кнопки "Наверх"
   useEffect(() => {
     const btnUp = document.querySelector('.btn-up')
     
@@ -38,7 +37,6 @@ function Footer() {
   return (
     <footer>
       <div className="footer_content_main">
-        {/* Левая колонка: логотип и описание */}
         <div className="footer_content">
           <div className="footer_logo_text">
             <img className="logo_footer" src="/images/logo.png" alt="Логотип фонда" />
@@ -56,7 +54,6 @@ function Footer() {
           </div>
         </div>
 
-        {/* Центральная колонка: навигация */}
         <nav className="footer_nav">
           <ul>
             <li><Link to="/">Главная</Link></li>
@@ -68,7 +65,6 @@ function Footer() {
           </ul>
         </nav>
 
-        {/* Правая колонка: контакты */}
         <nav className="footer_nav">
           <ul>
             <li>Контакты:</li>
@@ -79,18 +75,18 @@ function Footer() {
         </nav>
       </div>
 
-      {/* Кнопка "Наверх" */}
       <button className="btn-up btn-up_hide" aria-label="Наверх">
         ↑
       </button>
 
-      {/* Нижняя линия */}
       <hr className="footer_line" />
 
-      {/* Копирайт */}
       <div className="footer-bottom">
         <div className="footer-copyright">
           <p>© {currentYear} Фонд «Земля Вологодская». Все права защищены.</p>
+          <Link to="/privacy" style={{ color: '#FFFCEA', textDecoration: 'underline' }}>
+            Политика конфиденциальности
+          </Link>
         </div>
       </div>
     </footer>

@@ -1,48 +1,52 @@
 import { useState, useEffect } from 'react'
-import api from '../services/api'  // ← убрали MEDIA_URL
-import '../style.css'
+import api from '../services/api'
+import SmallProjectCard from './SmallProjectCard'
 
-function PartnersSection() {
-  const [partners, setPartners] = useState([])
+function ProjectsSection() {
+  const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    api.get('/partners/')
+    api.get('/projects/?status=active')
       .then(response => {
-        setPartners(response.data)
+        // Показываем только первые 3 проекта
+        const mainProjects = response.data.slice(0, 3)
+        setProjects(mainProjects)
         setLoading(false)
       })
       .catch(error => {
-        console.error('Ошибка загрузки партнеров:', error)
+        console.error('Ошибка загрузки проектов:', error)
         setLoading(false)
       })
   }, [])
 
-  if (loading) return null
-  if (partners.length === 0) return null
+  if (loading) return <div className="active_project">Загрузка...</div>
 
   return (
-    <div className="partner_fond">
+    <div className="active_project">
       <div className="zagolovok">
-        <p className="zag_main">Наши партнёры</p>
+        <p className="zag_main">Активные проекты</p>
         <div className="line"></div>
-        <p className="zag_description">Совместными усилиями мы достигаем большего</p>
+        <p className="zag_description">
+          Проекты, реализуемые прямо сейчас в различных районах <br />
+          Вологодской области
+        </p>
       </div>
-      
-      <div className="content_partner">
-        {partners.map(partner => (
-          <div key={partner.id} className="partner">
-            {partner.logo && (
-              <img className="patner_img" src={partner.logo} alt={partner.name} />
-            )}
-            <a className="partner_name" href={partner.link} target="_blank" rel="noopener noreferrer">
-              {partner.name}
-            </a>
-          </div>
+      <div className="small-project_catalog">
+        {projects.map(project => (
+          <SmallProjectCard
+            key={project.id}
+            city={project.city}
+            title={project.title}
+            description={project.short_description}
+            status={project.status_display || project.status}
+            image={project.image_url}
+            slug={project.slug}
+          />
         ))}
       </div>
     </div>
   )
 }
 
-export default PartnersSection
+export default ProjectsSection

@@ -27,22 +27,20 @@ import TeamPage from './pages/TeamPage'
 import DocumentsPage from './pages/DocumentsPage'
 import FondPage from './pages/FondPage'
 import ContactsPage from './pages/ContactsPage'
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
 import NotFoundPage from './pages/NotFoundPage'
 
-// Компонент проверки авторизации для редиректа
 function AdminRedirect() {
   const token = localStorage.getItem('admin_token')
   return token ? <Navigate to="/admin/projects" replace /> : <Navigate to="/admin/login" replace />
 }
 
-// Компонент с маршрутами
 function AppRoutes() {
   const { modalType, isOpen, closeModal } = useModal()
   
   return (
     <>
       <Routes>
-        {/* Публичные маршруты */}
         <Route path="/" element={<HomePage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/projects/:slug" element={<ProjectDetailPage />} />
@@ -50,8 +48,8 @@ function AppRoutes() {
         <Route path="/documents" element={<DocumentsPage />} />
         <Route path="/fond" element={<FondPage />} />
         <Route path="/contacts" element={<ContactsPage />} />
+        <Route path="/privacy" element={<PrivacyPolicyPage />} />
         
-        {/* Админ маршруты */}
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={<AdminRedirect />} />
         <Route path="/admin" element={
@@ -82,7 +80,6 @@ function AppRoutes() {
   )
 }
 
-// Главный компонент
 function App() {
   return (
     <ModalProvider>

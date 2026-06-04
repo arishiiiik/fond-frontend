@@ -9,7 +9,6 @@ import './contacts.css'
 import './project.css'
 import './project_description.css'
 
-// Восстанавливаем путь после редиректа
 const redirectPath = sessionStorage.getItem('redirectPath');
 if (redirectPath && redirectPath !== '/') {
   sessionStorage.removeItem('redirectPath');

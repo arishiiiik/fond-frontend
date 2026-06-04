@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useModal } from '../hooks/useModal'
+import { useModal } from '../context/ModalContext'
 import '../style.css'
 
 function Header() {
@@ -60,4 +60,3 @@ function Header() {
 }
 
 export default Header
-

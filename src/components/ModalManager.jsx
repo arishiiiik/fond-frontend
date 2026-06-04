@@ -3,9 +3,14 @@ import api from '../services/api'
 
 function DonationModal({ onClose }) {
   const [loading, setLoading] = useState(false)
+  const [agreed, setAgreed] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (!agreed) {
+      alert('Пожалуйста, подтвердите согласие на обработку персональных данных')
+      return
+    }
     setLoading(true)
     
     const formData = {
@@ -16,17 +21,15 @@ function DonationModal({ onClose }) {
     
     try {
       const response = await api.post('/donation-requests/', formData)
-      
       if (response.status === 201) {
-        alert('Спасибо! Ваша заявка принята.')
+        alert('Спасибо! Ваша заявка принята. Наш менеджер свяжется с вами в ближайшее время.')
         onClose()
         e.target.reset()
-      } else {
-        alert('Ошибка: ' + JSON.stringify(response.data))
+        setAgreed(false)
       }
     } catch (error) {
       console.error('Ошибка:', error)
-      alert('Ошибка подключения к серверу')
+      alert('Ошибка подключения к серверу. Пожалуйста, попробуйте позже.')
     } finally {
       setLoading(false)
     }
@@ -46,6 +49,22 @@ function DonationModal({ onClose }) {
         <label>Email</label>
         <input type="email" name="email" />
       </div>
+      
+      <div style={{ margin: '16px 0' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <input 
+            type="checkbox" 
+            checked={agreed} 
+            onChange={(e) => setAgreed(e.target.checked)} 
+            required 
+          />
+          <span style={{ fontSize: '12px' }}>
+            Нажимая кнопку «Отправить», я даю своё согласие на обработку персональных данных 
+            в соответствии с <a href="/privacy" target="_blank">Политикой конфиденциальности</a>
+          </span>
+        </label>
+      </div>
+      
       <div className="modal-footer">
         <button type="button" className="btn-secondary" onClick={onClose}>Отмена</button>
         <button type="submit" className="btn-primary" disabled={loading}>
@@ -58,9 +77,14 @@ function DonationModal({ onClose }) {
 
 function PartnerModal({ onClose }) {
   const [loading, setLoading] = useState(false)
+  const [agreed, setAgreed] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (!agreed) {
+      alert('Пожалуйста, подтвердите согласие на обработку персональных данных')
+      return
+    }
     setLoading(true)
     
     const formData = {
@@ -73,17 +97,15 @@ function PartnerModal({ onClose }) {
     
     try {
       const response = await api.post('/partner-requests/', formData)
-      
       if (response.status === 201) {
-        alert('Заявка отправлена! Мы свяжемся с вами.')
+        alert('Заявка отправлена! Наш менеджер свяжется с вами в ближайшее время.')
         onClose()
         e.target.reset()
-      } else {
-        alert('Ошибка: ' + JSON.stringify(response.data))
+        setAgreed(false)
       }
     } catch (error) {
       console.error('Ошибка:', error)
-      alert('Ошибка подключения к серверу')
+      alert('Ошибка подключения к серверу. Пожалуйста, попробуйте позже.')
     } finally {
       setLoading(false)
     }
@@ -115,6 +137,22 @@ function PartnerModal({ onClose }) {
         <label>Email *</label>
         <input type="email" name="email" required />
       </div>
+      
+      <div style={{ margin: '16px 0' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <input 
+            type="checkbox" 
+            checked={agreed} 
+            onChange={(e) => setAgreed(e.target.checked)} 
+            required 
+          />
+          <span style={{ fontSize: '12px' }}>
+            Нажимая кнопку «Отправить», я даю своё согласие на обработку персональных данных 
+            в соответствии с <a href="/privacy" target="_blank">Политикой конфиденциальности</a>
+          </span>
+        </label>
+      </div>
+      
       <div className="modal-footer">
         <button type="button" className="btn-secondary" onClick={onClose}>Отмена</button>
         <button type="submit" className="btn-primary" disabled={loading}>
@@ -127,9 +165,14 @@ function PartnerModal({ onClose }) {
 
 function VolunteerModal({ onClose }) {
   const [loading, setLoading] = useState(false)
+  const [agreed, setAgreed] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (!agreed) {
+      alert('Пожалуйста, подтвердите согласие на обработку персональных данных')
+      return
+    }
     setLoading(true)
     
     const formData = {
@@ -142,17 +185,15 @@ function VolunteerModal({ onClose }) {
     
     try {
       const response = await api.post('/volunteer-requests/', formData)
-      
       if (response.status === 201) {
-        alert('Заявка отправлена! Мы свяжемся с вами.')
+        alert('Заявка отправлена! Наш менеджер свяжется с вами в ближайшее время.')
         onClose()
         e.target.reset()
-      } else {
-        alert('Ошибка: ' + JSON.stringify(response.data))
+        setAgreed(false)
       }
     } catch (error) {
       console.error('Ошибка:', error)
-      alert('Ошибка подключения к серверу')
+      alert('Ошибка подключения к серверу. Пожалуйста, попробуйте позже.')
     } finally {
       setLoading(false)
     }
@@ -184,6 +225,22 @@ function VolunteerModal({ onClose }) {
         <label>Email *</label>
         <input type="email" name="email" required />
       </div>
+      
+      <div style={{ margin: '16px 0' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <input 
+            type="checkbox" 
+            checked={agreed} 
+            onChange={(e) => setAgreed(e.target.checked)} 
+            required 
+          />
+          <span style={{ fontSize: '12px' }}>
+            Нажимая кнопку «Отправить», я даю своё согласие на обработку персональных данных 
+            в соответствии с <a href="/privacy" target="_blank">Политикой конфиденциальности</a>
+          </span>
+        </label>
+      </div>
+      
       <div className="modal-footer">
         <button type="button" className="btn-secondary" onClick={onClose}>Отмена</button>
         <button type="submit" className="btn-primary" disabled={loading}>
