@@ -7,9 +7,18 @@ function ProjectsSection() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    api.get('/projects/?status=active')
+    // Получаем все проекты
+    api.get('/projects/')
       .then(response => {
-        setProjects(response.data)
+        console.log('Все проекты:', response.data.length)
+        // Фильтруем только активные и берём первые 3
+        const activeProjects = response.data.filter(p => 
+          p.status === 'active' || p.status_display === 'Активный'
+        )
+        console.log('Активные проекты:', activeProjects.length)
+        // Берём первые 3
+        const mainProjects = activeProjects.slice(0, 3)
+        setProjects(mainProjects)
         setLoading(false)
       })
       .catch(error => {
@@ -19,6 +28,10 @@ function ProjectsSection() {
   }, [])
 
   if (loading) return <div className="active_project">Загрузка...</div>
+
+  if (projects.length === 0) {
+    return null
+  }
 
   return (
     <div className="active_project">
@@ -38,7 +51,7 @@ function ProjectsSection() {
             title={project.title}
             description={project.short_description}
             status={project.status_display || project.status}
-            image={project.image}
+            image={project.image_url}
             slug={project.slug}
           />
         ))}
