@@ -1,19 +1,16 @@
 import '../style.css'
 
 function ProjectCard({ city, title, description, status, date, image, slug }) {
-  const getImageUrl = () => {
-    if (image && image !== 'null' && image !== '') {
-      return image
-    }
-    return `/images/projects/${slug}.png`
-  }
+  // Берём изображение ТОЛЬКО из API
+  const imageUrl = image && image !== 'null' && image !== '' 
+    ? image 
+    : '/images/placeholder.jpg'
   
-  const fallbackImage = '/images/placeholder.jpg'
-  const imageUrl = getImageUrl()
   const statusClass = status === "Активный" ? "status-active" : "status-completed"
   
   const handleError = (e) => {
-    e.target.src = fallbackImage
+    console.log(`Не загрузилось: ${imageUrl}`)
+    e.target.src = '/images/placeholder.jpg'
   }
   
   return (

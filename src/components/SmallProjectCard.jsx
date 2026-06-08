@@ -1,21 +1,14 @@
 import '../style.css'
 
 function SmallProjectCard({ city, title, description, status, image, slug }) {
-  // Приоритет: 1. API image_url, 2. статика по slug, 3. заглушка
-  const getImageUrl = () => {
-    if (image && image !== 'null' && image !== '') {
-      return image
-    }
-    // Пробуем загрузить из статики по slug
-    return `/images/projects/${slug}.png`
-  }
-  
-  const fallbackImage = '/images/placeholder.jpg'
-  const imageUrl = getImageUrl()
+  // Берём изображение ТОЛЬКО из API
+  const imageUrl = image && image !== 'null' && image !== '' 
+    ? image 
+    : '/images/placeholder.jpg'  // только заглушка, без попыток угадать slug
   
   const handleError = (e) => {
-    console.log(`Не загрузилось: ${imageUrl}, пробуем заглушку`)
-    e.target.src = fallbackImage
+    console.log(`Не загрузилось: ${imageUrl}`)
+    e.target.src = '/images/placeholder.jpg'
   }
   
   return (
