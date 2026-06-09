@@ -1,13 +1,16 @@
 import '../style.css'
 
-function ProjectCard({ city, title, description, status, date, slug }) {
-  // Изображение ТОЛЬКО из статики, по slug
-  const imageUrl = `/images/project/${slug}.png`
-  const fallbackImage = '/images/placeholder.jpg'
+function ProjectCard({ city, title, description, status, date, image, slug }) {
+  // Берём изображение ТОЛЬКО из API
+  const imageUrl = image && image !== 'null' && image !== '' 
+    ? image 
+    : '/images/placeholder.jpg'
+  
   const statusClass = status === "Активный" ? "status-active" : "status-completed"
   
   const handleError = (e) => {
-    e.target.src = fallbackImage
+    console.log(`Не загрузилось: ${imageUrl}`)
+    e.target.src = '/images/placeholder.jpg'
   }
   
   return (
