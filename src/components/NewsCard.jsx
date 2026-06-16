@@ -1,7 +1,16 @@
 import '../style.css'
 
 function NewsCard({ date, title, description, image, link }) {
-  const imageUrl = image || null
+  // Формируем правильный URL для изображения
+  const getImageUrl = () => {
+    if (!image) return null
+    if (image.startsWith('/media/')) {
+      return `http://159.194.229.53${image}`
+    }
+    return image
+  }
+  
+  const imageUrl = getImageUrl()
   
   return (
     <div className="new">

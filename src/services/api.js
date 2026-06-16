@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'https://fond-backend.onrender.com/api'
+const API_URL = 'http://159.194.229.53/api'
 
 const api = axios.create({
     baseURL: API_URL,

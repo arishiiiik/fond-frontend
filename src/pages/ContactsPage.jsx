@@ -197,15 +197,6 @@ function ContactsPage() {
                         </form>
                     </div>
                 </div>
-
-                {/* Блок "Поддержать фонд" */}
-                <div className="support-block">
-                    <div className="support-content">
-                        <h2>Поддержите нашу работу</h2>
-                        <p>Ваша помощь позволяет нам реализовывать проекты и развивать малые города и сёла Вологодской области</p>
-                        <button className="support-btn" onClick={openDonationModal}>Поддержать фонд</button>
-                    </div>
-                </div>
             </main>
             <Footer />
         </div>

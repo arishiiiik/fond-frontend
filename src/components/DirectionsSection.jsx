@@ -46,7 +46,7 @@ function DirectionsSection() {
         {directions.map(direction => (
           <DirectionCard
             key={direction.id}
-            icon={direction.icon} 
+            icon={direction.icon_url} 
             title={direction.title}
             description={direction.description}
           />

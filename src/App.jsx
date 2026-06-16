@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import PrivateRoute from './components/PrivateRoute'
 import { ModalProvider, useModal } from './context/ModalContext'
 import ModalManager from './components/ModalManager'
+import CookieConsent from './components/CookieConsent'
 
 // Импорты компонентов админки
 import AdminLayout from './pages/admin/AdminLayout'
@@ -18,6 +19,8 @@ import AdminDirections from './pages/admin/AdminDirections'
 import AdminDonations from './pages/admin/AdminDonations'
 import AdminPartnersRequests from './pages/admin/AdminPartnersRequests'
 import AdminVolunteers from './pages/admin/AdminVolunteers'
+import AdminHeroSlides from './pages/admin/AdminHeroSlides'
+import AdminPrivacy from './pages/admin/AdminPrivacy'
 
 // Импорты публичных страниц
 import HomePage from './pages/HomePage'
@@ -30,17 +33,14 @@ import ContactsPage from './pages/ContactsPage'
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
 import NotFoundPage from './pages/NotFoundPage'
 
-function AdminRedirect() {
-  const token = localStorage.getItem('admin_token')
-  return token ? <Navigate to="/admin/projects" replace /> : <Navigate to="/admin/login" replace />
-}
-
 function AppRoutes() {
   const { modalType, isOpen, closeModal } = useModal()
+  const token = localStorage.getItem('admin_token')
   
   return (
     <>
       <Routes>
+        {/* Публичные маршруты */}
         <Route path="/" element={<HomePage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/projects/:slug" element={<ProjectDetailPage />} />
@@ -50,16 +50,18 @@ function AppRoutes() {
         <Route path="/contacts" element={<ContactsPage />} />
         <Route path="/privacy" element={<PrivacyPolicyPage />} />
         
+        {/* Страница входа в админку */}
         <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin" element={<AdminRedirect />} />
+        
+        {/* Защищённые админские маршруты */}
         <Route path="/admin" element={
-          <PrivateRoute>
-            <AdminLayout />
-          </PrivateRoute>
+          token ? <AdminLayout /> : <Navigate to="/admin/login" replace />
         }>
           <Route index element={<Navigate to="/admin/projects" replace />} />
           <Route path="home" element={<AdminHomePage />} />
           <Route path="fond" element={<AdminFondPage />} />
+          <Route path="hero-slides" element={<AdminHeroSlides />} />
+          <Route path="privacy" element={<AdminPrivacy />} />
           <Route path="projects" element={<AdminProjects />} />
           <Route path="news" element={<AdminNews />} />
           <Route path="team" element={<AdminTeam />} />
@@ -76,6 +78,7 @@ function AppRoutes() {
       </Routes>
       
       <ModalManager modalType={modalType} isOpen={isOpen} onClose={closeModal} />
+      <CookieConsent />
     </>
   )
 }

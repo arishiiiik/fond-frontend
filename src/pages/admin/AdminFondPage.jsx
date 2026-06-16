@@ -141,8 +141,8 @@ function AdminFondPage() {
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
                             <strong>{item.year} - {item.title}</strong>
                             <div>
-                                <button onClick={() => openHistoryForm(item)} style={{ ...buttonStyle, padding: '4px 12px', marginRight: '8px' }}>✏️</button>
-                                <button onClick={() => deleteHistory(item.id)} style={deleteButton}>🗑️</button>
+                                <button onClick={() => openHistoryForm(item)} style={{ ...buttonStyle, padding: '4px 12px', marginRight: '8px' }}>Редактировать</button>
+                                <button onClick={() => deleteHistory(item.id)} style={deleteButton}>Удалить</button>
                             </div>
                         </div>
                         <p>{item.description}</p>

@@ -34,6 +34,7 @@
 
 body {
     background-color: var(--light);
+    padding-top: 90px;
 }
 
 main {
@@ -45,56 +46,59 @@ main {
 /* ---------- HEADER ---------- */
 header {
     width: 100%;
-    height: 9%;
     background: #FFFCEA;
     box-shadow: 0px 4px 10.9px rgba(0, 0, 0, 0.25);
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     position: fixed;
-    z-index: 11;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    padding: 15px 5%;
+    box-sizing: border-box;
 }
 
 .logo {
     display: flex;
     align-items: center;
+    gap: 10px;
 }
 
 .logo img {
-    width: 20%;
-    margin-right: 2%;
+    width: 50px;
+    height: auto;
 }
 
 .logo-description_1 {
     font-family: 'Vezitsa';
-    font-weight: 400;
-    font-size: 24px;
-    line-height: 20px;
+    font-size: 20px;
+    line-height: 1.2;
     color: #886429;
 }
 
 .logo-description_2 {
     font-family: 'Vezitsa';
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 20px;
+    font-size: 12px;
+    line-height: 1.2;
     color: #55993C;
 }
 
 .navigaciya ul {
     display: flex;
-    justify-content: space-between;
+    gap: 30px;
     list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .navigaciya li {
-    margin-left: 5%;
+    margin-left: 0;
 }
 
 .navigaciya a {
     font-family: 'Montserrat-Regular';
-    font-weight: 400;
-    font-size: 20px;
+    font-size: 16px;
     color: black;
     text-decoration: none;
     position: relative;
@@ -123,13 +127,12 @@ header {
 }
 
 .button_support {
-    padding: 0.8% 1.5%;
+    padding: 10px 20px;
     background: linear-gradient(90deg, #55993C 0%, #92BA52 100%);
-    border-radius: 20px;
+    border-radius: 25px;
     border: none;
-    font-family: 'Montserrat-Regular';
-    font-weight: 700;
-    font-size: 20px;
+    font-family: 'Montserrat-Bold';
+    font-size: 16px;
     color: #FFFCEA;
     cursor: pointer;
     transition: var(--transition);
@@ -169,12 +172,11 @@ header {
     flex-direction: column;
     justify-content: space-between;
     width: 30px;
-    height: 24px;
+    height: 21px;
     background: transparent;
     border: none;
     cursor: pointer;
-    padding: 0;
-    z-index: 1000;
+    z-index: 1001;
 }
 
 .burger-btn span {
@@ -182,37 +184,41 @@ header {
     width: 100%;
     height: 3px;
     background: #825B2C;
-    border-radius: 2px;
+    border-radius: 3px;
     transition: all 0.3s ease;
 }
 
-#burger-toggle:checked~.burger-btn span:nth-child(1) {
-    transform: translateY(10px) rotate(45deg);
+#burger-toggle {
+    display: none;
 }
 
-#burger-toggle:checked~.burger-btn span:nth-child(2) {
+#burger-toggle:checked ~ .burger-btn span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+#burger-toggle:checked ~ .burger-btn span:nth-child(2) {
     opacity: 0;
 }
 
-#burger-toggle:checked~.burger-btn span:nth-child(3) {
-    transform: translateY(-10px) rotate(-45deg);
+#burger-toggle:checked ~ .burger-btn span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
 }
 
 .mobile-nav {
     position: fixed;
     top: 0;
     right: -100%;
-    width: 300px;
+    width: 280px;
     height: 100vh;
     background: #FFFCEA;
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-    z-index: 999;
+    z-index: 1002;
     transition: right 0.3s ease;
-    padding: 100px 30px 30px;
+    padding: 80px 25px 30px;
     overflow-y: auto;
 }
 
-#burger-toggle:checked~.mobile-nav {
+#burger-toggle:checked ~ .mobile-nav {
     right: 0;
 }
 
@@ -223,15 +229,20 @@ header {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 998;
+    z-index: 1001;
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
 }
 
-#burger-toggle:checked~.mobile-overlay {
+#burger-toggle:checked ~ .mobile-overlay {
     opacity: 1;
     visibility: visible;
+}
+
+.mobile-nav .logo {
+    margin-bottom: 30px;
+    justify-content: center;
 }
 
 .mobile-nav ul {
@@ -250,7 +261,7 @@ header {
     color: #3E2201;
     text-decoration: none;
     display: block;
-    padding: 12px 0;
+    padding: 10px 0;
     border-bottom: 1px solid rgba(130, 91, 44, 0.1);
 }
 
@@ -264,7 +275,6 @@ header {
     text-align: center;
     margin-top: 30px;
     padding: 12px;
-    font-size: 16px;
 }
 
 /* ---------- КАРУСЕЛЬ ---------- */
@@ -1708,17 +1718,25 @@ footer {
         display: flex;
     }
 
-    .button_support {
+    .button_support:not(.mobile-nav .button_support) {
         display: none;
-    }
-
-    .mobile-nav .button_support {
-        display: block;
     }
 
     header {
         justify-content: space-between;
-        padding: 0 15px;
+        padding: 12px 5%;
+    }
+
+    .logo img {
+        width: 40px;
+    }
+
+    .logo-description_1 {
+        font-size: 16px;
+    }
+
+    .logo-description_2 {
+        font-size: 10px;
     }
 
     .cards_work {
@@ -1795,8 +1813,8 @@ footer {
 
 /* 768px */
 @media (max-width: 768px) {
-    main {
-        padding-top: 80px;
+    body {
+        padding-top: 70px;
     }
 
     .content_block {
@@ -1895,8 +1913,8 @@ footer {
 
 /* 576px */
 @media (max-width: 576px) {
-    main {
-        padding-top: 70px;
+    body {
+        padding-top: 60px;
     }
 
     .content_block {
@@ -2004,6 +2022,10 @@ footer {
 
 /* 480px */
 @media (max-width: 480px) {
+    body {
+        padding-top: 55px;
+    }
+
     .contact_form {
         margin-bottom: 5%;
         width: 95%;
@@ -2399,7 +2421,6 @@ footer {
 
 .privacy-content h2 {
     color: #825B2C;
-    margin-top: 30px;
     margin-bottom: 15px;
     font-family: 'Vezitsa', sans-serif;
 }
@@ -2427,4 +2448,140 @@ footer {
         flex-direction: column;
         text-align: center;
     }
+}
+
+/* ===== РЕКВИЗИТЫ В МОДАЛЬНОМ ОКНЕ (в стиле других модалок) ===== */
+.details-block {
+    background: #FFFFFF;
+    border: 1px solid #e0d5c0;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.details-block p {
+    margin: 10px 0;
+    font-family: 'Montserrat-Regular', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #3E2201;
+}
+
+.details-block strong {
+    font-family: 'Montserrat-Bold', sans-serif;
+    color: #825B2C;
+}
+
+.qr-block {
+    text-align: center;
+    background: #FFFFFF;
+    border: 1px solid #e0d5c0;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.qr-block p {
+    font-family: 'Montserrat-Regular', sans-serif;
+    font-size: 14px;
+    color: #3E2201;
+    margin-top: 10px;
+}
+
+.modal-note {
+    font-family: 'Montserrat-Regular', sans-serif;
+    font-size: 14px;
+    color: #886429;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Cookie уведомление */
+.cookie-consent {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #7E5B2C;
+    z-index: 9999;
+    padding: 15px 20px;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.cookie-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.cookie-content p {
+    font-family: 'Montserrat-Regular', sans-serif;
+    font-size: 14px;
+    color: #FFFCEA;
+    margin: 0;
+    flex: 1;
+}
+
+.cookie-content a {
+    color: #92BA52;
+    text-decoration: underline;
+}
+
+.cookie-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.cookie-btn {
+    padding: 8px 20px;
+    border-radius: 25px;
+    font-family: 'Montserrat-Bold', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.cookie-btn-primary {
+    background: linear-gradient(90deg, #419037 0%, #92BA52 100%);
+    color: white;
+}
+
+.cookie-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(65, 144, 55, 0.3);
+}
+
+.cookie-btn-secondary {
+    background: transparent;
+    border: 1px solid #FFFCEA;
+    color: #FFFCEA;
+}
+
+.cookie-btn-secondary:hover {
+    background: rgba(255, 252, 234, 0.1);
+}
+
+@media (max-width: 768px) {
+    .cookie-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .cookie-buttons {
+        justify-content: center;
+    }
+}
+
+/* Дополнительные исправления для страниц */
+.project_content {
+    padding-top: 0;
+}
+
+.privacy-page {
+    padding-top: 0;
 }

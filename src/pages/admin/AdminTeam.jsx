@@ -130,8 +130,8 @@ function AdminTeam() {
                                 <td style={{ padding: '15px' }}>{item.position}</td>
                                 <td style={{ padding: '15px' }}>{item.email}</td>
                                 <td style={{ padding: '15px' }}>
-                                    <button onClick={() => openForm(item)} style={{ ...buttonStyle, padding: '4px 12px', marginRight: '8px' }}>✏️</button>
-                                    <button onClick={() => handleDelete(item.id)} style={deleteButton}>🗑️</button>
+                                    <button onClick={() => openForm(item)} style={{ ...buttonStyle, padding: '4px 12px', marginRight: '8px' }}>Редактировать</button>
+                                    <button onClick={() => handleDelete(item.id)} style={deleteButton}>Удалить</button>
                                 </td>
                             </tr>
                         ))}

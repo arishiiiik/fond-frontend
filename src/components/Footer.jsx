@@ -83,9 +83,18 @@ function Footer() {
 
       <div className="footer-bottom">
         <div className="footer-copyright">
-          <p>© {currentYear} Фонд «Земля Вологодская». Все права защищены.</p>
-          <Link to="/privacy" style={{ color: '#FFFCEA', textDecoration: 'underline' }}>
-            Политика конфиденциальности
+          <div>
+            <p>© {currentYear} Фонд «Земля Вологодская». Все права защищены.</p>
+            <p style={{ fontSize: '12px', marginTop: '5px' }}>
+              Фонд развития малых городов и сёл Вологодской области
+            </p>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontSize: '12px' }}>Юридический адрес: 160035, г. Вологда, Советский проспект, 35А</p>
+            <p style={{ fontSize: '12px' }}>ИНН/КПП: 3525300881 / 352501001</p>
+          </div>
+          <Link to="/privacy" style={{ color: '#FFFCEA', textDecoration: 'underline', fontSize: '12px' }}>
+            Политика обработки персональных данных
           </Link>
         </div>
       </div>

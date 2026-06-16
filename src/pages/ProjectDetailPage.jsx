@@ -26,6 +26,15 @@ function ProjectDetailPage() {
     if (loading) return <div style={{ textAlign: 'center', padding: '100px' }}>Загрузка...</div>
     if (!project) return null
 
+    // Формируем URL изображения
+    const getImageUrl = (imagePath) => {
+        if (!imagePath) return null
+        if (imagePath.startsWith('/media/')) {
+            return `http://159.194.229.53${imagePath}`
+        }
+        return imagePath
+    }
+
     return (
         <div>
             <Header />
@@ -38,7 +47,12 @@ function ProjectDetailPage() {
                 <div className="project_content">
                     <div className="project_descr">
                         <p className="pd_text">{project.full_description || project.short_description}</p>
-                        <img className="pd_img" src={project.image_url || '/images/project/default.png'} alt={project.title} />
+                        <img 
+                            className="pd_img" 
+                            src={getImageUrl(project.image_url) || '/images/placeholder.jpg'} 
+                            alt={project.title} 
+                            onError={(e) => e.target.src = '/images/placeholder.jpg'}
+                        />
                     </div>
 
                     <div className="zagolovok">
@@ -89,6 +103,31 @@ function ProjectDetailPage() {
                             </div>
                         </div>
                     </div>
+
+                    {/* ГАЛЕРЕЯ ПРОЕКТА */}
+                    {project.gallery && project.gallery.length > 0 && (
+                        <>
+                            <div className="zagolovok">
+                                <p className="zag_main">Галерея проекта</p>
+                                <div className="line"></div>
+                            </div>
+                            <div className="gallery">
+                                {project.gallery.map((item, index) => (
+                                    <figure 
+                                        key={item.id} 
+                                        className={`gallery__item gallery__item--${index + 1}`}
+                                    >
+                                        <img 
+                                            src={getImageUrl(item.image_url)} 
+                                            alt={`${project.title} ${index + 1}`} 
+                                            className="gallery__img"
+                                            onError={(e) => e.target.src = '/images/placeholder.jpg'}
+                                        />
+                                    </figure>
+                                ))}
+                            </div>
+                        </>
+                    )}
                 </div>
             </main>
             <Footer />

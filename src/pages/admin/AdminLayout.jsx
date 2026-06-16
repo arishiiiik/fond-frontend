@@ -35,13 +35,15 @@ function AdminLayout() {
 
                 <nav style={{ flex: 1 }}>
                     <div style={{ marginBottom: '20px' }}>
-                        <h3 style={{ fontSize: '14px', opacity: 0.7, marginBottom: '10px' }}>ОСНОВНЫЕ СТРАНИЦЫ</h3>
+                        <h3 style={{ fontSize: '14px', opacity: 0.7, marginBottom: '10px' }}>Основные страницы</h3>
                         <NavLink to="/admin/home" active={isActive('/admin/home')}>Главная страница</NavLink>
                         <NavLink to="/admin/fond" active={isActive('/admin/fond')}>О фонде</NavLink>
+                        <NavLink to="/admin/hero-slides" active={isActive('/admin/hero-slides')}>Слайды главной</NavLink>
+                        <NavLink to="/admin/privacy" active={isActive('/admin/privacy')}>Политика конфиденциальности</NavLink>
                     </div>
 
                     <div style={{ marginBottom: '20px' }}>
-                        <h3 style={{ fontSize: '14px', opacity: 0.7, marginBottom: '10px' }}>КОНТЕНТ</h3>
+                        <h3 style={{ fontSize: '14px', opacity: 0.7, marginBottom: '10px' }}>Контент</h3>
                         <NavLink to="/admin/projects" active={isActive('/admin/projects')}>Проекты</NavLink>
                         <NavLink to="/admin/news" active={isActive('/admin/news')}>Новости</NavLink>
                         <NavLink to="/admin/team" active={isActive('/admin/team')}>Команда</NavLink>
@@ -51,14 +53,14 @@ function AdminLayout() {
                     </div>
 
                     <div style={{ marginBottom: '20px' }}>
-                        <h3 style={{ fontSize: '14px', opacity: 0.7, marginBottom: '10px' }}>ЗАЯВКИ</h3>
+                        <h3 style={{ fontSize: '14px', opacity: 0.7, marginBottom: '10px' }}>Заявки</h3>
                         <NavLink to="/admin/donations" active={isActive('/admin/donations')}>Пожертвования</NavLink>
                         <NavLink to="/admin/partner-requests" active={isActive('/admin/partner-requests')}>Партнёрство</NavLink>
                         <NavLink to="/admin/volunteers" active={isActive('/admin/volunteers')}>Волонтёры</NavLink>
                     </div>
 
                     <div style={{ marginBottom: '20px' }}>
-                        <h3 style={{ fontSize: '14px', opacity: 0.7, marginBottom: '10px' }}>НАСТРОЙКИ</h3>
+                        <h3 style={{ fontSize: '14px', opacity: 0.7, marginBottom: '10px' }}>Настройки</h3>
                         <NavLink to="/admin/contacts" active={isActive('/admin/contacts')}>Контакты</NavLink>
                     </div>
                 </nav>

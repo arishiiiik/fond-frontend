@@ -2,7 +2,17 @@ import { useModal } from '../context/ModalContext'
 
 function HelpCard({ icon, title, description, buttonText, modalType }) {
   const { openDonationModal, openPartnerModal, openVolunteerModal } = useModal()
-  const imageUrl = icon || null
+  
+  // Формируем правильный URL для иконки
+  const getImageUrl = () => {
+    if (!icon) return null
+    if (icon.startsWith('/media/')) {
+      return `http://159.194.229.53${icon}`
+    }
+    return icon
+  }
+  
+  const imageUrl = getImageUrl()
   
   const handleClick = () => {
     if (modalType === 'donation') openDonationModal()

@@ -33,7 +33,7 @@ function PartnersSection() {
         {partners.map(partner => (
           <div key={partner.id} className="partner">
             {partner.logo && (
-              <img className="patner_img" src={partner.logo} alt={partner.name} />
+              <img className="patner_img" src={partner.logo_url} alt={partner.name} />
             )}
             <a className="partner_name" href={partner.link} target="_blank" rel="noopener noreferrer">
               {partner.name}

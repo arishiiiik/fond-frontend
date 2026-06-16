@@ -325,8 +325,8 @@ function AdminHomePage() {
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div><strong>{card.title}</strong><br /><small>{card.button_text}</small></div>
                             <div>
-                                <button onClick={() => openHelpCardForm(card)} style={{ ...buttonStyle, padding: '4px 12px', marginRight: '8px' }}>✏️</button>
-                                <button onClick={() => deleteHelpCard(card.id)} style={deleteButton}>🗑️</button>
+                                <button onClick={() => openHelpCardForm(card)} style={{ ...buttonStyle, padding: '4px 12px', marginRight: '8px' }}>Редактировать</button>
+                                <button onClick={() => deleteHelpCard(card.id)} style={deleteButton}>Удалить</button>
                             </div>
                         </div>
                     </div>

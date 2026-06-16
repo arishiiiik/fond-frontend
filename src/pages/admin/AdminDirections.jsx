@@ -136,8 +136,8 @@ function AdminDirections() {
                                 <td style={{ padding: '15px' }}>{item.title}</td>
                                 <td style={{ padding: '15px' }}>{item.description?.substring(0, 50)}...</td>
                                 <td style={{ padding: '15px' }}>
-                                    <button onClick={() => openForm(item)} style={{ ...buttonStyle, padding: '4px 12px', marginRight: '8px' }}>✏️</button>
-                                    <button onClick={() => handleDelete(item.id)} style={deleteButton}>🗑️</button>
+                                    <button onClick={() => openForm(item)} style={{ ...buttonStyle, padding: '4px 12px', marginRight: '8px' }}>Редактировать</button>
+                                    <button onClick={() => handleDelete(item.id)} style={deleteButton}>Удалить</button>
                                 </td>
                             </tr>
                         ))}

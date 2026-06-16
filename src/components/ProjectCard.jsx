@@ -1,11 +1,17 @@
 import '../style.css'
 
 function ProjectCard({ city, title, description, status, date, image, slug }) {
-  // Берём изображение ТОЛЬКО из API
-  const imageUrl = image && image !== 'null' && image !== '' 
-    ? image 
-    : '/images/placeholder.jpg'
+  const getImageUrl = () => {
+    if (!image || image === 'null' || image === '') {
+      return '/images/placeholder.jpg'
+    }
+    if (image.startsWith('/media/')) {
+      return `http://127.0.0.1:8000${image}`
+    }
+    return image
+  }
   
+  const imageUrl = getImageUrl()
   const statusClass = status === "Активный" ? "status-active" : "status-completed"
   
   const handleError = (e) => {

@@ -127,8 +127,8 @@ function AdminPartners() {
                         {item.logo_url && <img src={item.logo_url} alt={item.name} style={{ width: '80px', height: '80px', objectFit: 'contain', marginBottom: '8px' }} />}
                         <strong>{item.name}</strong>
                         <div style={{ marginTop: '12px' }}>
-                            <button onClick={() => openForm(item)} style={{ ...buttonStyle, padding: '4px 12px', marginRight: '8px' }}>✏️</button>
-                            <button onClick={() => handleDelete(item.id)} style={deleteButton}>🗑️</button>
+                            <button onClick={() => openForm(item)} style={{ ...buttonStyle, padding: '4px 12px', marginRight: '8px' }}>Редактировать</button>
+                            <button onClick={() => handleDelete(item.id)} style={deleteButton}>Удалить</button>
                         </div>
                     </div>
                 ))}

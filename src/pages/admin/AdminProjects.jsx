@@ -155,8 +155,8 @@ function AdminProjects() {
                                 <td style={{ padding: '15px' }}>{item.city}</td>
                                 <td style={{ padding: '15px' }}>{item.status_display || item.status}</td>
                                 <td style={{ padding: '15px' }}>
-                                    <button onClick={() => openEditForm(item)} style={{ ...buttonStyle, padding: '4px 12px', marginRight: '8px' }}>✏️</button>
-                                    <button onClick={() => handleDelete(item.slug)} style={deleteButton}>🗑️</button>
+                                    <button onClick={() => openEditForm(item)} style={{ ...buttonStyle, padding: '4px 12px', marginRight: '8px' }}>Редактировать</button>
+                                    <button onClick={() => handleDelete(item.slug)} style={deleteButton}>Удалить</button>
                                 </td>
                             </tr>
                         ))}

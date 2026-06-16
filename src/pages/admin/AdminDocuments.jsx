@@ -149,8 +149,8 @@ function AdminDocuments() {
                             <tr key={item.id} style={{ borderBottom: '1px solid #e0d5c0' }}>
                                 <td style={{ padding: '15px' }}>{item.title}</td>
                                 <td style={{ padding: '15px' }}>
-                                    <button onClick={() => openEditForm(item)} style={{ ...buttonStyle, padding: '4px 12px', marginRight: '8px' }}>✏️</button>
-                                    <button onClick={() => handleDelete(item.id)} style={deleteButton}>🗑️</button>
+                                    <button onClick={() => openEditForm(item)} style={{ ...buttonStyle, padding: '4px 12px', marginRight: '8px' }}>Редактировать</button>
+                                    <button onClick={() => handleDelete(item.id)} style={deleteButton}>Удалить</button>
                                 </td>
                             </tr>
                         ))}

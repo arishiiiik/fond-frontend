@@ -2,12 +2,31 @@ import '../../style.css'
 import '../../team.css'
 
 function TeamCard({ name, position, email, phone, vk, photo }) {
-    const photoUrl = photo || '/images/team/default.png'
+    // Формируем правильный URL для фото
+    const getPhotoUrl = () => {
+        if (!photo) return '/images/team/default.png'
+        // Если путь относительный, добавляем базовый URL бэкенда
+        if (photo.startsWith('/media/')) {
+            return `http://159.194.229.53${photo}`
+        }
+        return photo
+    }
+    
+    const photoUrl = getPhotoUrl()
+    const fallbackPhoto = '/images/team/default.png'
+    
+    const handleError = (e) => {
+        e.target.src = fallbackPhoto
+    }
     
     return (
         <div className="team_cart">
             <div className="team_img">
-                <img src={photoUrl} alt={name} />
+                <img 
+                    src={photoUrl} 
+                    alt={name}
+                    onError={handleError}
+                />
             </div>
             <div className="team_text">
                 <h2>{name}</h2>

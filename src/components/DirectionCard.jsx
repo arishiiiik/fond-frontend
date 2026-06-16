@@ -1,7 +1,16 @@
 import '../style.css'
 
 function DirectionCard({ icon, title, description }) {
-  const imageUrl = icon || null
+  // Если icon начинается с /media/, добавляем базовый URL бэкенда
+  const getImageUrl = () => {
+    if (!icon) return null
+    if (icon.startsWith('/media/')) {
+      return `http://159.194.229.53${icon}`
+    }
+    return icon
+  }
+  
+  const imageUrl = getImageUrl()
   
   return (
     <div className="card">
